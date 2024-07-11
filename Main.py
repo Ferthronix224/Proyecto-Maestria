@@ -6,6 +6,7 @@ from Fitness import Flanned_Matcher
 
 # Ecualizacion
 def HEq(img):
+    img = np.uint8(np.absolute(img))
     img = cv2.convertScaleAbs(img)
     return cv2.equalizeHist(img)
 
@@ -55,6 +56,9 @@ def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
         x, y = c.ravel()
         cv2.circle(imagen, center=(x, y), radius=5, color=(0, 0, 255), thickness=-1)
     if mostrar:
+        if imagen.dtype != np.uint8:
+            print('int8')
+            img2 = np.uint8(np.absolute(imagen))
         cv2.imshow('imagen', imagen)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -103,8 +107,8 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     puntos_de_interes_2 = detectar_puntos_de_interes(filtro2_normalizada, umbral_deteccion)
 
     # Mostrar los puntos de interés detectados
-    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, True)
-    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, True)
+    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, False)
+    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, False)
 
     output, repeatability = Flanned_Matcher(imagen1, imagen2)
 
@@ -117,6 +121,6 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    img_1 = cv2.imread('img/Diapositiva1.JPG')
-    img_2 = cv2.imread('img/Diapositiva2.JPG')
+    img_1 = cv2.imread('img/Cuadrado 3.JPG')
+    img_2 = cv2.imread('img/Rotado movido.JPG')
     deteccion_de_puntos_de_interes(img_1, img_2)
