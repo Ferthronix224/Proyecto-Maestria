@@ -4,21 +4,26 @@ import MP
 import DE
 from Fitness import Flanned_Matcher
 
+# Ecualizacion
 def HEq(img):
     img = cv2.convertScaleAbs(img)
     return cv2.equalizeHist(img)
 
+# Laplaciano-Gaussiano 1
 def LapG1(img):
     return Lap(Gau1(img))
 
+# Laplaciano-Gaussiano 2
 def LapG2(img):
     return Lap(Gau2(img))
 
+# Laplaciano
 def Lap(img):
     if img.dtype != np.float32 and img.dtype != np.float64:
         img = img.astype(np.float32)
     return cv2.Laplacian(img, cv2.CV_64F, ksize=5)
 
+# Gaussiano 1
 def Gau1(img):
     if img.dtype != np.float32 and img.dtype != np.float64:
         img = img.astype(np.float32)
@@ -26,6 +31,7 @@ def Gau1(img):
     # Aplicar el filtro de la Gaussiana
     return cv2.GaussianBlur(img, (5, 5), sigmaX=1, sigmaY=1)
 
+# Gaussiano 2
 def Gau2(img):
     if img.dtype != np.float32 and img.dtype != np.float64:
         img = img.astype(np.float32)
