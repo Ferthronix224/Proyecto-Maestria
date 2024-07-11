@@ -32,7 +32,7 @@ def add_gaussian_noise(image, snr_db):
 
 img = cv2.imread('img/Diapositiva1.JPG')
 img = cv2.resize(img, (500, 500))
-noisy_img = add_gaussian_noise(img, 2)
+noisy_img = add_gaussian_noise(img, 5)
 cv2.imwrite('img/Noisy.jpg', noisy_img)
 cv2.imshow('img/Noisy.jpg', noisy_img)
 cv2.waitKey(0)

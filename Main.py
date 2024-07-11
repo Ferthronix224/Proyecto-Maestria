@@ -58,7 +58,7 @@ def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     if mostrar:
         if imagen.dtype != np.uint8:
             print('int8')
-            img2 = np.uint8(np.absolute(imagen))
+            imagen = np.uint8(np.absolute(imagen))
         cv2.imshow('imagen', imagen)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -92,11 +92,12 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
 
     # Proceso de mapeo
     filter_MP = MP.generate(population)
-    print(filter_MP)
+    #print(filter_MP)
 
     # Evaluacion de los filtros
-    filtro1 = evaluation(img1, filter_MP)
-    filtro2 = evaluation(img2, filter_MP)
+    # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
+    filtro1 = evaluation(img1.copy(), filter_MP)
+    filtro2 = evaluation(img2.copy(), filter_MP)
 
     # Normalización de los datos
     filtro1_normalizada = normalizar(filtro1)
@@ -107,8 +108,8 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     puntos_de_interes_2 = detectar_puntos_de_interes(filtro2_normalizada, umbral_deteccion)
 
     # Mostrar los puntos de interés detectados
-    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, False)
-    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, False)
+    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, True)
+    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, True)
 
     output, repeatability = Flanned_Matcher(imagen1, imagen2)
 
@@ -121,6 +122,6 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    img_1 = cv2.imread('img/Cuadrado 3.JPG')
+    img_1 = cv2.imread('img/Rotado.JPG')
     img_2 = cv2.imread('img/Rotado movido.JPG')
     deteccion_de_puntos_de_interes(img_1, img_2)
