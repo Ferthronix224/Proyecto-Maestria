@@ -3,58 +3,22 @@ import numpy as np
 import MP
 import DE
 from Fitness import Flanned_Matcher
+import Filters as ft
 
-# Ecualizacion
-def HEq(img):
-    img = np.uint8(np.absolute(img))
-    img = cv2.convertScaleAbs(img)
-    return cv2.equalizeHist(img)
-
-# Laplaciano-Gaussiano 1
-def LapG1(img):
-    return Lap(Gau1(img))
-
-# Laplaciano-Gaussiano 2
-def LapG2(img):
-    return Lap(Gau2(img))
-
-# Laplaciano
-def Lap(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-    return cv2.Laplacian(img, cv2.CV_64F, ksize=5)
-
-# Gaussiano 1
-def Gau1(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-
-    # Aplicar el filtro de la Gaussiana
-    return cv2.GaussianBlur(img, (5, 5), sigmaX=1, sigmaY=1)
-
-# Gaussiano 2
-def Gau2(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-
-    # Aplicar el filtro de la Gaussiana
-    return cv2.GaussianBlur(img, (5, 5), sigmaX=2, sigmaY=2)
-
-def detectar_puntos_de_interes(magnitud_gradiente, umbral):
+def detectar_puntos_de_interes(magnitud, umbral):
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
-    mask = magnitud_gradiente > umbral
+    mask = magnitud > umbral
 
     # Encontrar los índices de los elementos que son True en la máscara
     indices = np.argwhere(mask)
 
     return indices
 
-
 # Función para mostrar puntos de interés
 def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     for c in puntos_de_interes:
         x, y = c.ravel()
-        cv2.circle(imagen, center=(x, y), radius=5, color=(0, 0, 255), thickness=-1)
+        imagen = cv2.circle(imagen, center=(x, y), radius=5, color=(0, 0, 255), thickness=-1)
     if mostrar:
         if imagen.dtype != np.uint8:
             print('int8')
@@ -92,7 +56,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
 
     # Proceso de mapeo
     filter_MP = MP.generate(population)
-    #print(filter_MP)
+    print(filter_MP)
 
     # Evaluacion de los filtros
     # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
@@ -103,20 +67,20 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     filtro1_normalizada = normalizar(filtro1)
     filtro2_normalizada = normalizar(filtro2)
 
-    # Detectar puntos de interés basados en la magnitud del gradiente
+    # Detectar puntos de interés basados en la magnitud
     puntos_de_interes_1 = detectar_puntos_de_interes(filtro1_normalizada, umbral_deteccion)
     puntos_de_interes_2 = detectar_puntos_de_interes(filtro2_normalizada, umbral_deteccion)
 
     # Mostrar los puntos de interés detectados
-    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, True)
-    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, True)
+    imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, False)
+    imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, False)
 
     output, repeatability = Flanned_Matcher(imagen1, imagen2)
 
-    # Print the repeatability rate
+    # Imprime la tasa de repetibilidad
     print(f'Repeatability rate: {repeatability:.2f}%')
 
-    # Save the image
+    # Muestra la imagen
     cv2.imshow('Match.jpg', output)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

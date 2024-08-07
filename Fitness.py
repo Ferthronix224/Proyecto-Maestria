@@ -37,6 +37,9 @@ def Flanned_Matcher(main_image, sub_image):
     img = cv.drawMatchesKnn(main_image, key_point1, sub_image, key_point2, matches, None, **draw_params)
 
     # Calcular tasa de repetibilidad
-    repeatability = good_matches / min(len(key_point1), len(key_point2)) * 100
+    if min(len(key_point1), len(key_point2)) == 0:
+        repeatability = 0
+    else:
+        repeatability = good_matches / min(len(key_point1), len(key_point2)) * 100
 
     return img, repeatability

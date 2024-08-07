@@ -6,9 +6,9 @@ productions = {
     '<Start>': ['<Expr>'],
     '<Expr>': ['<Expr><Op><Expr>', '<Filter>(<Expr>)', '<Terminal>'],
     '<Filter>': ['<Gau>', '<Arith>', '<Lap>'],
-    '<Gau>': ['Gau1', 'Gau2'],
-    '<Lap>': ['LapG1', 'LapG2', 'Lap'],
-    '<Arith>': ['HEq', 'np.sqrt', 'np.log'],
+    '<Gau>': ['ft.Gau1', 'ft.Gau2'],
+    '<Lap>': ['ft.LapG1', 'ft.LapG2', 'ft.Lap'],
+    '<Arith>': ['ft.HEq', 'ft.sqrt', 'ft.log'],
     '<Op>': ['+', '-', '*'],
     '<Terminal>': ['img']
 }
