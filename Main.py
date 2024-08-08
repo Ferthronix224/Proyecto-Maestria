@@ -18,7 +18,7 @@ def detectar_puntos_de_interes(magnitud, umbral):
 def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     for c in puntos_de_interes:
         x, y = c.ravel()
-        imagen = cv2.circle(imagen, center=(x, y), radius=5, color=(0, 0, 255), thickness=-1)
+        imagen = cv2.circle(imagen, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
     if mostrar:
         if imagen.dtype != np.uint8:
             print('int8')
@@ -86,6 +86,6 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion=0.95):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    img_1 = cv2.imread('img/Rotado.JPG')
-    img_2 = cv2.imread('img/Rotado movido.JPG')
+    img_1 = cv2.imread('img/Cuadrado 3.JPG')
+    img_2 = cv2.imread('img/Formas.png')
     deteccion_de_puntos_de_interes(img_1, img_2)

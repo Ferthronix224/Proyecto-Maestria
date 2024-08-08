@@ -1,10 +1,10 @@
 # Tasa de repetibilidad
-import cv2 as cv
+import cv2
 
 # Función que retorna la imagen con las coincidencias y la tasa de repetibilidad
 def Flanned_Matcher(main_image, sub_image):
     # Inicializar el detector SIFT
-    sift = cv.SIFT_create()
+    sift = cv2.SIFT_create()
 
     # Encontrar puntos de interes y descriptores con SIFT
     key_point1, descr1 = sift.detectAndCompute(main_image, None)
@@ -16,7 +16,7 @@ def Flanned_Matcher(main_image, sub_image):
     search_params = dict(checks=50)
 
     # FLANN con implementacion de KNN
-    flann = cv.FlannBasedMatcher(index_params, search_params)
+    flann = cv2.FlannBasedMatcher(index_params, search_params)
     matches = flann.knnMatch(descr1, descr2, k=2)
 
     # Seleccionar solo buenas coincidencias
@@ -34,7 +34,7 @@ def Flanned_Matcher(main_image, sub_image):
                        matchesMask=matchesMask, flags=0)
 
     # Dibujar las coincidencias
-    img = cv.drawMatchesKnn(main_image, key_point1, sub_image, key_point2, matches, None, **draw_params)
+    img = cv2.drawMatchesKnn(main_image, key_point1, sub_image, key_point2, matches, None, **draw_params)
 
     # Calcular tasa de repetibilidad
     if min(len(key_point1), len(key_point2)) == 0:
