@@ -1,5 +1,4 @@
 import re
-import DE
 
 # Definición de las reglas de producción
 productions = {
@@ -33,13 +32,13 @@ def generate(genotype):
         # Buscar todos los no terminales en la cadena actual
         non_terminals = re.findall(r'<[^>]+>', current_string)
         if not non_terminals and current_string == 'img':
-            return generate(DE.Individual(200, 0, 10).return_genotype())
+            current_string = "<Start>"
         if not non_terminals and current_string == 'img-img':
-            return generate(DE.Individual(200, 0, 10).return_genotype())
+            current_string = "<Start>"
         if not non_terminals:
             break
         if gen_index >= len(genotype):
-            return generate(DE.Individual(200, 0, 10).return_genotype())
+            current_string = "<Start>"
 
         # Reemplazar el primer no terminal encontrado
         for non_terminal in non_terminals:

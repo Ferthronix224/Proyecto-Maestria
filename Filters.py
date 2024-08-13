@@ -37,25 +37,27 @@ def Gau2(img):
     # Aplicar el filtro de la Gaussiana
     return cv2.GaussianBlur(img, (5, 5), sigmaX=2, sigmaY=2)
 
-def sqrt(input_list_2d):
+# Raíz Cuadrada
+def Sqrt(input_list_2d):
     result = []
     for sublist in input_list_2d:
         result_sublist = []
         for x in sublist:
             if x < 0:
-                result_sublist.append(x)  # np.nan indica un valor no numérico (NaN)
+                result_sublist.append(x)
             else:
                 result_sublist.append(np.sqrt(x))
         result.append(result_sublist)
     return np.array(result)
 
-def log(input_list_2d):
+# Logaritmo
+def Log(input_list_2d):
     result = []
     for sublist in input_list_2d:
         result_sublist = []
         for x in sublist:
             if x < 0 or x == 0:
-                result_sublist.append(x)  # np.nan indica un valor no numérico (NaN)
+                result_sublist.append(x)
             else:
                 result_sublist.append(np.sqrt(x))
         result.append(result_sublist)
