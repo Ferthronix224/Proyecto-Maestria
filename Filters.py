@@ -56,7 +56,7 @@ def Log(input_list_2d):
     for sublist in input_list_2d:
         result_sublist = []
         for x in sublist:
-            if x < 0 or x == 0:
+            if x <= 0:
                 result_sublist.append(x)
             else:
                 result_sublist.append(np.sqrt(x))

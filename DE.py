@@ -37,10 +37,7 @@ class Individual:
                     cross_population[i].append(population[i][j])
         return np.array(cross_population)
 
-    def Selection(self, population, cross_population, fit):
-        population_fitness = [fit(x) for x in population]
-        cross_population_fitness = [fit(x) for x in cross_population]
-
+    def Selection(self, population, cross_population, population_fitness, crossover_fitness):
         for i in range(len(population)):
-            if cross_population_fitness[i] <= population_fitness[i]:
+            if crossover_fitness[i] >= population_fitness[i]:
                 population[i] = cross_population[i]

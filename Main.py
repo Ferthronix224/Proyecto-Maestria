@@ -6,6 +6,7 @@ from Fitness import Flanned_Matcher
 import Filters as ft
 
 def detectar_puntos_de_interes(magnitud, umbral):
+    print('detectar_puntos_de_interes')
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
     mask = magnitud > umbral
 
@@ -16,6 +17,7 @@ def detectar_puntos_de_interes(magnitud, umbral):
 
 # Función para mostrar puntos de interés
 def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
+    print('obtener_puntos_de_interes')
     for c in puntos_de_interes:
         x, y = c.ravel()
         imagen = cv2.circle(imagen, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
@@ -29,16 +31,46 @@ def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     return imagen
 
 def normalizar(matriz):
+    print('normalizar')
     min_val = np.min(matriz)
     max_val = np.max(matriz)
     matriz_normalizada = (matriz - min_val) / (max_val - min_val)
     return matriz_normalizada
 
 def evaluation(img, filter):
+    print('evaluation')
     return eval(filter)
 
+def repetibilidad(population, img1, img2, umbral_deteccion):
+    print('repetibilidad')
+    # Proceso de mapeo
+    filter_MP = [MP.generate(population[i]) for i in range(len(population))]
+
+    # Evaluacion de los filtros
+    # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
+    filtro1 = [evaluation(img1.copy(), filter_MP[i]) for i in range(len(filter_MP))]
+    filtro2 = [evaluation(img2.copy(), filter_MP[i]) for i in range(len(filter_MP))]
+
+    # Normalización de los datos
+    filtro1_normalizada = [normalizar(filtro1[i]) for i in range(len(filtro1))]
+    filtro2_normalizada = [normalizar(filtro2[i]) for i in range(len(filtro2))]
+
+    # Detectar puntos de interés basados en la magnitud
+    puntos_de_interes_1 = [detectar_puntos_de_interes(filtro1_normalizada[i], umbral_deteccion) for i in
+                           range(len(filtro1_normalizada))]
+    puntos_de_interes_2 = [detectar_puntos_de_interes(filtro2_normalizada[i], umbral_deteccion) for i in
+                           range(len(filtro2_normalizada))]
+
+    # Mostrar los puntos de interés detectados
+    imagen1 = [obtener_puntos_de_interes(img1, puntos_de_interes_1[i], False) for i in range(len(puntos_de_interes_1))]
+    imagen2 = [obtener_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
+
+    output, repeatability = zip(*[Flanned_Matcher(imagen1[i], imagen2[i]) for i in range(len(imagen1))])
+
+    return output, repeatability, filter_MP
+
 # Proceso principal de detección de puntos de interés
-def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations):
+def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria):
     #  Condicion en caso de que la imagen no se halla encontrado
     if img1 is None or img2 is None:
         raise ValueError("Imagen no encontrada")
@@ -56,64 +88,63 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
     population = individual.init_population()
 
     for generation in range(generations):
-        mutation = individual.Mutation(population)
+        output_population, repeatability_population, filter_M = repetibilidad(population, img1, img2, umbral_deteccion)
+        print(filter_M)
+        best_current_fitness = max(repeatability_population)
+        print(best_current_fitness)
+        best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
+        best_current_output = output_population[repeatability_population.index(best_current_fitness)]
+
+        if generation == 0:
+            best_fitness = best_current_fitness
+            best_genotype = best_current_genotype
+            best_output = best_current_output
+        else:
+            if best_current_fitness > best_fitness:
+                best_fitness = best_current_fitness
+                best_genotype = best_current_genotype
+                best_output = best_current_output
+
+        mutation = individual.Mutation(population[0])
         crossover = individual.Crossover(population, mutation)
+        _, repeatability_crossover, _ = repetibilidad(crossover, img1, img2, umbral_deteccion)
+        individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
-        # Proceso de mapeo
-        filter_MP = MP.generate(population)
-        print(filter_MP)
+        # Impresión de pantalla con el mejor fitness cada 100 generaciones
+        if (generation + 1) % 10 == 0:
+            print(f'Generation {generation + 1}: Best Fitness = {best_current_fitness}')
+        # Criterio de paro cuando ya se encontró la mejor solución
+        if best_fitness >= TERMINATION_CRITERIA:
+            print(f'Generation {generation + 1}')
+            print(f'Best Solution: {best_genotype}')
+            print(f'Best Fitness: {best_fitness}')
+            # Muestra la imagen
+            cv2.imshow('Match.jpg', best_output)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            break
+        # Impresión de pantalla cuando ya se terminaron las generaciones
+        elif generation == GENERATIONS - 1:
+            print(f'Best Solution: {best_genotype}')
+            print(f'Best Fitness: {best_fitness}')
 
-        # Evaluacion de los filtros
-        # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
-        filtro1 = evaluation(img1.copy(), filter_MP)
-        filtro2 = evaluation(img2.copy(), filter_MP)
-
-        # Normalización de los datos
-        filtro1_normalizada = normalizar(filtro1)
-        filtro2_normalizada = normalizar(filtro2)
-
-        # Detectar puntos de interés basados en la magnitud
-        puntos_de_interes_1 = detectar_puntos_de_interes(filtro1_normalizada, umbral_deteccion)
-        puntos_de_interes_2 = detectar_puntos_de_interes(filtro2_normalizada, umbral_deteccion)
-
-        # Mostrar los puntos de interés detectados
-        imagen1 = obtener_puntos_de_interes(img1, puntos_de_interes_1, False)
-        imagen2 = obtener_puntos_de_interes(img2, puntos_de_interes_2, False)
-
-        output, repeatability = Flanned_Matcher(imagen1, imagen2)
-        individual.Selection(population, crossover)
-
-        # Imprime la tasa de repetibilidad
-        print(f'Repeatability rate: {repeatability:.2f}%')
-
-        # Muestra la imagen
-        cv2.imshow('Match.jpg', output)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+            # Muestra la imagen
+            cv2.imshow('Match.jpg', best_output)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     # Parámetros
     IMG1 = cv2.imread('img/Cuadrado 3.JPG')
-    IMG2 = cv2.imread('img/Formas.png')
+    IMG2 = cv2.imread('img/Escala.jpg')
     UMBRAL = 0.95
-    POPULATION_SIZE = 50
-    GENOTYPE_LENGTH = 50
+    POPULATION_SIZE = 1
+    GENOTYPE_LENGTH = 20
     LOW_LIM = 1
     UP_LIM = 255
     MUTATION_RATE = 0.5
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 100
+    GENERATIONS = 1
+    TERMINATION_CRITERIA = 95.0
 
-    deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, MUTATION_RATE, CROSSOVER_RATE, GENERATIONS)
-'''
-for i in range(generations):
-    fitness_value = [fit(x) for x in population]
-    fitness_value.sort()
-    best_individual = fitness_value[0]
-    print(i, best_individual)
-    if best_individual <= termination_criteria:
-        break
-    mutation = Mutation(F, population)
-    crossover = Crossover(CR, population, mutation)
-    Selection(population, crossover, fit)
-'''
+    deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, MUTATION_RATE, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA)

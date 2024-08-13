@@ -7,7 +7,7 @@ productions = {
     '<Filter>': ['<Gau>', '<Arith>', '<Lap>'],
     '<Gau>': ['ft.Gau1', 'ft.Gau2'],
     '<Lap>': ['ft.LapG1', 'ft.LapG2', 'ft.Lap'],
-    '<Arith>': ['ft.HEq', 'ft.sqrt', 'ft.log'],
+    '<Arith>': ['ft.HEq', 'ft.Sqrt', 'ft.Log'],
     '<Op>': ['+', '-', '*'],
     '<Terminal>': ['img']
 }
@@ -26,19 +26,22 @@ def expand_symbol(symbol, genotype, gen_index):
 def generate(genotype):
     current_string = "<Start>"
     gen_index = 0
+    mapi = 0
 
     # Expansión iterativa
     while True:
+        print(current_string)
         # Buscar todos los no terminales en la cadena actual
         non_terminals = re.findall(r'<[^>]+>', current_string)
         if not non_terminals and current_string == 'img':
             current_string = "<Start>"
         if not non_terminals and current_string == 'img-img':
             current_string = "<Start>"
-        if not non_terminals:
-            break
         if gen_index >= len(genotype):
             current_string = "<Start>"
+            gen_index = 0
+        if not non_terminals:
+            break
 
         # Reemplazar el primer no terminal encontrado
         for non_terminal in non_terminals:
