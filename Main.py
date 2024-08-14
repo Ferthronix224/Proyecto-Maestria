@@ -6,7 +6,6 @@ from Fitness import Flanned_Matcher
 import Filters as ft
 
 def detectar_puntos_de_interes(magnitud, umbral):
-    print('detectar_puntos_de_interes')
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
     mask = magnitud > umbral
 
@@ -17,7 +16,6 @@ def detectar_puntos_de_interes(magnitud, umbral):
 
 # Función para mostrar puntos de interés
 def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
-    print('obtener_puntos_de_interes')
     for c in puntos_de_interes:
         x, y = c.ravel()
         imagen = cv2.circle(imagen, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
@@ -31,7 +29,6 @@ def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     return imagen
 
 def normalizar(matriz):
-    print('normalizar')
     min_val = np.min(matriz)
     max_val = np.max(matriz)
     matriz_normalizada = (matriz - min_val) / (max_val - min_val)
@@ -42,7 +39,6 @@ def evaluation(img, filter):
     return eval(filter)
 
 def repetibilidad(population, img1, img2, umbral_deteccion):
-    print('repetibilidad')
     # Proceso de mapeo
     filter_MP = [MP.generate(population[i]) for i in range(len(population))]
 
@@ -83,10 +79,12 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
     img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
     img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
-    # Creacion del genotipo por medio de evolucion diferencial
+    # Creacion de la población por medio de evolucion diferencial
     individual = DE.Individual(population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate)
     population = individual.init_population()
+    print(population)
 
+    # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
         output_population, repeatability_population, filter_M = repetibilidad(population, img1, img2, umbral_deteccion)
         print(filter_M)
@@ -105,7 +103,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
                 best_genotype = best_current_genotype
                 best_output = best_current_output
 
-        mutation = individual.Mutation(population[0])
+        mutation = individual.Mutation(population)
         crossover = individual.Crossover(population, mutation)
         _, repeatability_crossover, _ = repetibilidad(crossover, img1, img2, umbral_deteccion)
         individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
@@ -114,7 +112,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
         if (generation + 1) % 10 == 0:
             print(f'Generation {generation + 1}: Best Fitness = {best_current_fitness}')
         # Criterio de paro cuando ya se encontró la mejor solución
-        if best_fitness >= TERMINATION_CRITERIA:
+        if best_fitness >= termination_criteria:
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
             print(f'Best Fitness: {best_fitness}')
@@ -138,8 +136,8 @@ if __name__ == '__main__':
     IMG1 = cv2.imread('img/Cuadrado 3.JPG')
     IMG2 = cv2.imread('img/Escala.jpg')
     UMBRAL = 0.95
-    POPULATION_SIZE = 1
-    GENOTYPE_LENGTH = 20
+    POPULATION_SIZE = 20
+    GENOTYPE_LENGTH = 50
     LOW_LIM = 1
     UP_LIM = 255
     MUTATION_RATE = 0.5

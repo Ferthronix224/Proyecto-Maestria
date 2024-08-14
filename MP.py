@@ -26,20 +26,17 @@ def expand_symbol(symbol, genotype, gen_index):
 def generate(genotype):
     current_string = "<Start>"
     gen_index = 0
-    mapi = 0
 
     # Expansión iterativa
     while True:
-        print(current_string)
         # Buscar todos los no terminales en la cadena actual
         non_terminals = re.findall(r'<[^>]+>', current_string)
+        if gen_index == (len(genotype) - 1):
+            gen_index = 0
         if not non_terminals and current_string == 'img':
             current_string = "<Start>"
         if not non_terminals and current_string == 'img-img':
             current_string = "<Start>"
-        if gen_index >= len(genotype):
-            current_string = "<Start>"
-            gen_index = 0
         if not non_terminals:
             break
 

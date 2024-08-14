@@ -20,10 +20,12 @@ class Individual:
     def Mutation(self, population):
         mutated_population = []
         for i in range(len(population)):
-            indexes = np.arange(0, len(population))
-            indexes = np.delete(indexes, i)
-            new = np.random.choice(indexes, 3, replace=False)
-            mutated_population.append(population[new[2]] + (self.MR * (population[new[1]] - population[new[0]])))
+            mutated_population.append([])
+            for j in range(len(population[i])):
+                indexes = np.arange(0, len(population[i]))
+                indexes = np.delete(indexes, j)
+                new = np.random.choice(indexes, 3, replace=False)
+                mutated_population[i].append(population[i][new[2]] + (self.MR * (population[i][new[1]] - population[i][new[0]])))
         return mutated_population
 
     def Crossover(self, population, mutated_population):
