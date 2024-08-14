@@ -35,7 +35,6 @@ def normalizar(matriz):
     return matriz_normalizada
 
 def evaluation(img, filter):
-    print('evaluation')
     return eval(filter)
 
 def repetibilidad(population, img1, img2, umbral_deteccion):
@@ -82,14 +81,11 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
     # Creacion de la población por medio de evolucion diferencial
     individual = DE.Individual(population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate)
     population = individual.init_population()
-    print(population)
 
     # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
         output_population, repeatability_population, filter_M = repetibilidad(population, img1, img2, umbral_deteccion)
-        print(filter_M)
         best_current_fitness = max(repeatability_population)
-        print(best_current_fitness)
         best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
         best_current_output = output_population[repeatability_population.index(best_current_fitness)]
 
@@ -110,6 +106,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
         # Impresión de pantalla con el mejor fitness cada 100 generaciones
         if (generation + 1) % 10 == 0:
+            print(repeatability_population)
             print(f'Generation {generation + 1}: Best Fitness = {best_current_fitness}')
         # Criterio de paro cuando ya se encontró la mejor solución
         if best_fitness >= termination_criteria:
@@ -133,16 +130,16 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
 if __name__ == '__main__':
     # Parámetros
-    IMG1 = cv2.imread('img/Cuadrado 3.JPG')
-    IMG2 = cv2.imread('img/Escala.jpg')
+    IMG1 = cv2.imread('img/Rotado.JPG')
+    IMG2 = cv2.imread('img/Rotado.JPG')
     UMBRAL = 0.95
-    POPULATION_SIZE = 20
+    POPULATION_SIZE = 10
     GENOTYPE_LENGTH = 50
     LOW_LIM = 1
     UP_LIM = 255
     MUTATION_RATE = 0.5
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 1
+    GENERATIONS = 100
     TERMINATION_CRITERIA = 95.0
 
     deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, MUTATION_RATE, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA)

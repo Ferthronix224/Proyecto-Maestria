@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 # Definición de las reglas de producción
 productions = {
@@ -32,18 +33,19 @@ def generate(genotype):
         # Buscar todos los no terminales en la cadena actual
         non_terminals = re.findall(r'<[^>]+>', current_string)
         if gen_index == (len(genotype) - 1):
-            gen_index = 0
+            np.random.shuffle(genotype)
+            return generate(genotype)
         if not non_terminals and current_string == 'img':
-            current_string = "<Start>"
+            np.random.shuffle(genotype)
+            return generate(genotype)
         if not non_terminals and current_string == 'img-img':
-            current_string = "<Start>"
+            np.random.shuffle(genotype)
+            return generate(genotype)
         if not non_terminals:
-            break
+            return current_string
 
         # Reemplazar el primer no terminal encontrado
         for non_terminal in non_terminals:
             expansion, gen_index = expand_symbol(non_terminal, genotype, gen_index)
             current_string = current_string.replace(non_terminal, expansion, 1)
             break  # Salir del bucle para reiniciar la búsqueda de no terminales
-
-    return current_string
