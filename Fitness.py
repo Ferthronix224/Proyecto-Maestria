@@ -8,6 +8,7 @@ def Flanned_Matcher(main_image, sub_image):
 
     # Encontrar puntos de interes y descriptores con SIFT
     key_point1, descr1 = sift.detectAndCompute(main_image, None)
+    print(key_point1)
     key_point2, descr2 = sift.detectAndCompute(sub_image, None)
 
     # Parametros para FLANN

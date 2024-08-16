@@ -4,6 +4,9 @@ import MP
 import DE
 from Fitness import Flanned_Matcher
 import Filters as ft
+import time
+
+inicio = time.time()
 
 def detectar_puntos_de_interes(magnitud, umbral):
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
@@ -84,7 +87,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
     # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
-        output_population, repeatability_population, filter_M = repetibilidad(population, img1, img2, umbral_deteccion)
+        output_population, repeatability_population, filter_M = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion)
         best_current_fitness = max(repeatability_population)
         best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
         best_current_output = output_population[repeatability_population.index(best_current_fitness)]
@@ -101,12 +104,11 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
         mutation = individual.Mutation(population)
         crossover = individual.Crossover(population, mutation)
-        _, repeatability_crossover, _ = repetibilidad(crossover, img1, img2, umbral_deteccion)
+        _, repeatability_crossover, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion)
         individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
         # Impresión de pantalla con el mejor fitness cada 100 generaciones
         if (generation + 1) % 10 == 0:
-            print(repeatability_population)
             print(f'Generation {generation + 1}: Best Fitness = {best_current_fitness}')
         # Criterio de paro cuando ya se encontró la mejor solución
         if best_fitness >= termination_criteria:
@@ -130,8 +132,8 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
 if __name__ == '__main__':
     # Parámetros
-    IMG1 = cv2.imread('img/Rotado.JPG')
-    IMG2 = cv2.imread('img/Rotado.JPG')
+    IMG1 = cv2.imread('img/Cuadrado 3.JPG')
+    IMG2 = cv2.imread('img/Escala.jpg')
     UMBRAL = 0.95
     POPULATION_SIZE = 10
     GENOTYPE_LENGTH = 50
@@ -143,3 +145,6 @@ if __name__ == '__main__':
     TERMINATION_CRITERIA = 95.0
 
     deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, MUTATION_RATE, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA)
+
+    fin = time.time()
+    print(f'Tiempo: {fin - inicio}')

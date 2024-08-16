@@ -41,6 +41,9 @@ def generate(genotype):
         if not non_terminals and current_string == 'img-img':
             np.random.shuffle(genotype)
             return generate(genotype)
+        if not non_terminals and current_string == 'img+img':
+            np.random.shuffle(genotype)
+            return generate(genotype)
         if not non_terminals:
             return current_string
 
