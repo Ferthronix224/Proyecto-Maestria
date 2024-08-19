@@ -3,13 +3,13 @@ import numpy as np
 
 
 class Individual:
-    def __init__(self, population_size, dimension, low_lim, up_lim, MR, CR):
+    def __init__(self, population_size, dimension, low_lim, up_lim, F, CR):
         self.population_size = population_size
         self.low_lim = low_lim
         self.up_lim = up_lim
         self.dimension = dimension
         self.CR = CR
-        self.MR = MR
+        self.F = F
 
     def random_genotype(self, low_lim, up_lim, dimension):
         return np.random.uniform(low=low_lim, high=up_lim, size=dimension)
@@ -20,12 +20,10 @@ class Individual:
     def Mutation(self, population):
         mutated_population = []
         for i in range(len(population)):
-            mutated_population.append([])
-            for j in range(len(population[i])):
-                indexes = np.arange(0, len(population[i]))
-                indexes = np.delete(indexes, j)
-                new = np.random.choice(indexes, 3, replace=False)
-                mutated_population[i].append(population[i][new[2]] + (self.MR * (population[i][new[1]] - population[i][new[0]])))
+            indexes = np.arange(0, len(population))
+            indexes = np.delete(indexes, i)
+            new = np.random.choice(indexes, 2, replace=False)
+            mutated_population.append(population[i] + (self.F * (population[new[1]] - population[new[0]])))
         return mutated_population
 
     def Crossover(self, population, mutated_population):
