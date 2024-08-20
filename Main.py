@@ -116,9 +116,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             print(f'Best Solution: {best_genotype}')
             print(f'Best Fitness: {best_fitness}')
             # Muestra la imagen
-            cv2.imshow('Match.jpg', best_output)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            cv2.imwrite('Match.jpg', best_output)
             break
         # Impresión de pantalla cuando ya se terminaron las generaciones
         elif generation == GENERATIONS - 1:
@@ -126,9 +124,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             print(f'Best Fitness: {best_fitness}')
 
             # Muestra la imagen
-            cv2.imshow('Match.jpg', best_output)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            cv2.imwrite('Match.jpg', best_output)
 
 if __name__ == '__main__':
     # Parámetros
@@ -139,7 +135,7 @@ if __name__ == '__main__':
     GENOTYPE_LENGTH = 50
     LOW_LIM = 1
     UP_LIM = 255
-    F = 0.5
+    F = 0.5 # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
     GENERATIONS = 2
     TERMINATION_CRITERIA = 95.0
