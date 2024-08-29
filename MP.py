@@ -9,7 +9,7 @@ productions = {
     '<Gau>': ['ft.Gau1', 'ft.Gau2'],
     '<Lap>': ['ft.LapG1', 'ft.LapG2', 'ft.Lap'],
     '<Arith>': ['ft.HEq', 'ft.Sqrt', 'ft.Log'],
-    '<Op>': ['+', '-', '*'],
+    '<Op>': ['+', '-', '*', '/'],
     '<Terminal>': ['img']
 }
 
@@ -24,26 +24,18 @@ def expand_symbol(symbol, genotype, gen_index):
 
 
 # Función principal para generar una cadena desde el símbolo de inicio
-def generate(genotype):
+def generate(genotype, wr):
     current_string = "<Start>"
     gen_index = 0
+    if wr > 1:
+        genotype * wr
 
     # Expansión iterativa
     while True:
         # Buscar todos los no terminales en la cadena actual
         non_terminals = re.findall(r'<[^>]+>', current_string)
         if gen_index == (len(genotype) - 1):
-            np.random.shuffle(genotype)
-            return generate(genotype)
-        if not non_terminals and current_string == 'img':
-            np.random.shuffle(genotype)
-            return generate(genotype)
-        if not non_terminals and current_string == 'img-img':
-            np.random.shuffle(genotype)
-            return generate(genotype)
-        if not non_terminals and current_string == 'img+img':
-            np.random.shuffle(genotype)
-            return generate(genotype)
+            return 'Worst'
         if not non_terminals:
             return current_string
 

@@ -38,11 +38,13 @@ def normalizar(matriz):
     return matriz_normalizada
 
 def evaluation(img, filter):
+    if filter == 'Worst':
+        return 0
     return eval(filter)
 
-def repetibilidad(population, img1, img2, umbral_deteccion):
+def repetibilidad(population, img1, img2, umbral_deteccion, wr):
     # Proceso de mapeo
-    filter_MP = [MP.generate(population[i]) for i in range(len(population))]
+    filter_MP = [MP.generate(population[i], wr) for i in range(len(population))]
 
     # Evaluacion de los filtros
     # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
@@ -68,7 +70,7 @@ def repetibilidad(population, img1, img2, umbral_deteccion):
     return output, repeatability, filter_MP
 
 # Proceso principal de detección de puntos de interés
-def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria):
+def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr):
     #  Condicion en caso de que la imagen no se halla encontrado
     if img1 is None or img2 is None:
         raise ValueError("Imagen no encontrada")
@@ -87,7 +89,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
     # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
-        output_population, repeatability_population, filter_M = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion)
+        output_population, repeatability_population, filter_M = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion, wr)
         best_current_fitness = max(repeatability_population)
         best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
         best_current_output = output_population[repeatability_population.index(best_current_fitness)]
@@ -104,7 +106,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
         mutation = individual.Mutation(population)
         crossover = individual.Crossover(population, mutation)
-        _, repeatability_crossover, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion)
+        _, repeatability_crossover, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr)
         individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
         # Impresión de pantalla con el mejor fitness cada 100 generaciones
@@ -129,18 +131,19 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 if __name__ == '__main__':
     # Parámetros
     IMG1 = cv2.imread('img/Cuadrado 3.JPG')
-    IMG2 = cv2.imread('img/Escala.jpg')
+    IMG2 = cv2.imread('img/Rotation.JPG')
     UMBRAL = 0.95
     POPULATION_SIZE = 10
     GENOTYPE_LENGTH = 50
     LOW_LIM = 1
     UP_LIM = 255
-    F = 0.5 # Xm = Xi + f (x2 - x3)
+    F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
     GENERATIONS = 2
     TERMINATION_CRITERIA = 95.0
+    WR = 3
 
-    deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA)
+    deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR)
 
     fin = time.time()
     print(f'Tiempo: {fin - inicio}')
