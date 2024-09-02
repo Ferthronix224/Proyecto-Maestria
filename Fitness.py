@@ -1,45 +1,48 @@
 # Tasa de repetibilidad
 import cv2
+import math
+import numpy as np
 
 # Función que retorna la imagen con las coincidencias y la tasa de repetibilidad
-def Flanned_Matcher(main_image, sub_image):
-    # Inicializar el detector SIFT
-    sift = cv2.SIFT_create()
+def Flanned_Matcher(image1, rotated_keypoints):
+    mask = image1 > 0.95
 
-    # Encontrar puntos de interes y descriptores con SIFT
-    key_point1, descr1 = sift.detectAndCompute(main_image, None)
-    key_point2, descr2 = sift.detectAndCompute(sub_image, None)
+    # Encontrar los índices de los elementos que son True en la máscara
 
-    # Parametros para FLANN
-    FLANN_INDEX_KDTREE = 0
-    index_params = dict(algorithm=FLANN_INDEX_KDTREE, trees=5)
-    search_params = dict(checks=50)
+    image_rotation = rotation(mask)
 
-    # FLANN con implementacion de KNN
-    flann = cv2.FlannBasedMatcher(index_params, search_params)
-    matches = flann.knnMatch(descr1, descr2, k=2)
-
-    # Seleccionar solo buenas coincidencias
-    matchesMask = [[0, 0] for i in range(len(matches))]
+    indices = np.argwhere(mask)
 
     good_matches = 0
 
-    for i, (m, n) in enumerate(matches):
-        if m.distance < 0.1 * n.distance:
-            matchesMask[i] = [1, 0]
-            good_matches += 1
-
-    draw_params = dict(matchColor=(0, 255, 0),
-                       singlePointColor=(255, 0, 0),
-                       matchesMask=matchesMask, flags=0)
-
-    # Dibujar las coincidencias
-    img = cv2.drawMatchesKnn(main_image, key_point1, sub_image, key_point2, matches, None, **draw_params)
+    for indices in image_rotation:
+        for coord2 in rotated_keypoints:
+            if distancia_euclidiana(indices, coord2) < 5:
+                good_matches += 1
 
     # Calcular tasa de repetibilidad
-    if min(len(key_point1), len(key_point2)) == 0:
+    if min(len(rotated_keypoints), len(rotated_keypoints)) == 0:
         repeatability = 0
     else:
-        repeatability = good_matches / min(len(key_point1), len(key_point2)) * 100
+        repeatability = good_matches / min(len(rotated_keypoints), len(rotated_keypoints)) * 100
 
-    return img, repeatability
+    return repeatability
+
+def rotation(matrix):
+    # Ángulo de rotación en grados
+    angle_degrees = 15
+
+    # Obtener las dimensiones de la imagen
+    height, width = matrix.shape[:2]
+
+    # Calcular el centro de la imagen
+    center = (width // 2, height // 2)
+
+    # Obtener la matriz de rotación
+    rotation_matrix = cv2.getRotationMatrix2D(center, angle_degrees, scale=1.0)
+
+    # Aplicar la rotación
+    return cv2.warpAffine(matrix, rotation_matrix, (width, height))
+
+def distancia_euclidiana(coord1, coord2):
+    return math.sqrt((coord1[0] - coord2[0]) ** 2 + (coord1[1] - coord2[1]) ** 2)
