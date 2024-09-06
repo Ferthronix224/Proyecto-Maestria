@@ -65,9 +65,9 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr):
 
     # Mostrar los puntos de interés detectados
     imagen1 = [obtener_puntos_de_interes(img1, puntos_de_interes_1[i], False) for i in range(len(puntos_de_interes_1))]
-    imagen2 = [obtener_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
+    #imagen2 = [obtener_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
 
-    repeatability = [Flanned_Matcher(imagen1[i], puntos_de_interes_2[i]) for i in range(len(imagen1))]
+    repeatability = [Flanned_Matcher(filtro1_normalizada[i], puntos_de_interes_2[i]) for i in range(len(imagen1))]
 
     return repeatability, filter_MP
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     UP_LIM = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 2
+    GENERATIONS = 20
     TERMINATION_CRITERIA = 95.0
     WR = 3
 

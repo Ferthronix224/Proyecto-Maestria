@@ -5,30 +5,34 @@ import numpy as np
 
 # Función que retorna la imagen con las coincidencias y la tasa de repetibilidad
 def Flanned_Matcher(image1, rotated_keypoints):
+    if type(image1) == int:
+        return 0
+    if len(rotated_keypoints) > 10_000 or len(image1) > 10_000 or len(image1) == 0 or len(rotated_keypoints) == 0:
+        return 0
+
     mask = image1 > 0.95
 
     # Encontrar los índices de los elementos que son True en la máscara
 
     image_rotation = rotation(mask)
 
-    indices = np.argwhere(mask)
+    indices = np.argwhere(image_rotation)
 
-    good_matches = 0
+    distances = np.linalg.norm(indices[:, np.newaxis] - rotated_keypoints, axis=2)
+    good_matches = np.sum(distances < 5)
 
-    for indices in image_rotation:
-        for coord2 in rotated_keypoints:
-            if distancia_euclidiana(indices, coord2) < 5:
-                good_matches += 1
-
+    print('exitos de ' + str(good_matches) + ' minimo de ' + str(min(len(indices), len(rotated_keypoints))))
     # Calcular tasa de repetibilidad
-    if min(len(rotated_keypoints), len(rotated_keypoints)) == 0:
+    if good_matches == 0:
         repeatability = 0
     else:
-        repeatability = good_matches / min(len(rotated_keypoints), len(rotated_keypoints)) * 100
+        repeatability = (good_matches / min(indices.size, rotated_keypoints.size)) * 100
+        print(repeatability)
 
     return repeatability
 
 def rotation(matrix):
+    matrix = matrix.astype(int)
     # Ángulo de rotación en grados
     angle_degrees = 15
 
@@ -40,6 +44,8 @@ def rotation(matrix):
 
     # Obtener la matriz de rotación
     rotation_matrix = cv2.getRotationMatrix2D(center, angle_degrees, scale=1.0)
+
+    matrix = np.float32(matrix)
 
     # Aplicar la rotación
     return cv2.warpAffine(matrix, rotation_matrix, (width, height))
