@@ -1,17 +1,13 @@
 import numpy as np
-import time
 
-# inicio = time.time()
+arrar = np.array([[5, 5, 6], [2, 4, 6], [2, 4, 6], [7, 7, 6]])
 
-indices = np.array([[1, np.random.randint(1, 100)] for _ in range(10000)])
-rotated_keypoints = np.array([[2, np.random.randint(1, 100)] for _ in range(10000)])
+MASK = (arrar <= 5)
 
-print(len(indices), indices.shape, indices.size)
+good_matches = 0
 
-# distances = np.linalg.norm(indices[:, np.newaxis] - rotated_keypoints, axis=2)
-# good_matches = np.sum(distances <= 5)
-# print(good_matches)
-#
-# fin = time.time()
-#
-# print(fin - inicio)
+for i in MASK:
+    if True in i:
+        good_matches +=1
+
+print(good_matches)
