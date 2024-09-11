@@ -18,7 +18,7 @@ def detectar_puntos_de_interes(magnitud, umbral):
     return indices
 
 # Función para mostrar puntos de interés
-def obtener_puntos_de_interes(imagen, puntos_de_interes, mostrar):
+def mostrar_puntos_de_interes(imagen, puntos_de_interes, mostrar):
     for c in puntos_de_interes:
         x, y = c.ravel()
         imagen = cv2.circle(imagen, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
@@ -64,8 +64,8 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number
                            range(len(filtro2_normalizada))]
 
     # Mostrar los puntos de interés detectados
-    imagen1 = [obtener_puntos_de_interes(img1, puntos_de_interes_1[i], False) for i in range(len(puntos_de_interes_1))]
-    imagen2 = [obtener_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
+    imagen1 = [mostrar_puntos_de_interes(img1, puntos_de_interes_1[i], False) for i in range(len(puntos_de_interes_1))]
+    imagen2 = [mostrar_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
 
     repeatability = [Flanned_Matcher(puntos_de_interes_1[i], puntos_de_interes_2[i], keypoints_number) for i in range(len(imagen1))]
 
