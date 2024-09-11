@@ -1,5 +1,4 @@
 import re
-import numpy as np
 
 # Definición de las reglas de producción
 productions = {
