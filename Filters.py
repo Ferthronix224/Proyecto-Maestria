@@ -3,7 +3,7 @@ import cv2
 
 # Ecualizacion
 def HEq(img):
-    img = np.uint8(np.absolute(img))
+    img = np.uint8(img)
     img = cv2.convertScaleAbs(img)
     return cv2.equalizeHist(img)
 
