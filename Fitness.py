@@ -9,11 +9,8 @@ def Flanned_Matcher(keypoints, rotated_keypoints, keypoints_number):
         return 0
 
     keypoints = rotation(keypoints)
-
     distances = np.linalg.norm(keypoints[:, np.newaxis] - rotated_keypoints, axis=2)
-
     matches = distances <= 5
-
     good_matches = 0
 
     for i in matches:
@@ -25,7 +22,6 @@ def Flanned_Matcher(keypoints, rotated_keypoints, keypoints_number):
         repeatability = 0
     else:
         repeatability = (good_matches / min(len(keypoints), len(rotated_keypoints))) * 100
-        print(repeatability)
 
     return repeatability
 
