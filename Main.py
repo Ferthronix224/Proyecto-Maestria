@@ -17,20 +17,6 @@ def detectar_puntos_de_interes(magnitud, umbral):
 
     return indices
 
-# Función para mostrar puntos de interés
-def mostrar_puntos_de_interes(imagen, puntos_de_interes, mostrar):
-    for c in puntos_de_interes:
-        x, y = c.ravel()
-        imagen = cv2.circle(imagen, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
-    if mostrar:
-        if imagen.dtype != np.uint8:
-            print('int8')
-            imagen = np.uint8(np.absolute(imagen))
-        cv2.imshow('imagen', imagen)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-    return imagen
-
 def normalizar(matriz):
     if type(matriz) == int:
         return 0
@@ -63,13 +49,9 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number
     puntos_de_interes_2 = [detectar_puntos_de_interes(filtro2_normalizada[i], umbral_deteccion) for i in
                            range(len(filtro2_normalizada))]
 
-    # Mostrar los puntos de interés detectados
-    imagen1 = [mostrar_puntos_de_interes(img1, puntos_de_interes_1[i], False) for i in range(len(puntos_de_interes_1))]
-    imagen2 = [mostrar_puntos_de_interes(img2, puntos_de_interes_2[i], False) for i in range(len(puntos_de_interes_2))]
+    repeatability, images, rotated_images = zip(*[Flanned_Matcher(img1.copy(), img2.copy(), puntos_de_interes_1[i], puntos_de_interes_2[i], keypoints_number) for i in range(len(filter_MP))])
 
-    repeatability = [Flanned_Matcher(puntos_de_interes_1[i], puntos_de_interes_2[i], keypoints_number) for i in range(len(imagen1))]
-
-    return repeatability, filter_MP
+    return repeatability, filter_MP, images, rotated_images
 
 # Proceso principal de detección de puntos de interés
 def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, keypoints_number):
@@ -91,21 +73,27 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
     # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
-        repeatability_population, filter_M = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
+        repeatability_population, filter_M, images, rotated_images = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
         best_current_fitness = max(repeatability_population)
         best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
+        best_current_image = images[repeatability_population.index(best_current_fitness)]
+        best_current_rotated_image = rotated_images[repeatability_population.index(best_current_fitness)]
 
         if generation == 0:
             best_fitness = best_current_fitness
             best_genotype = best_current_genotype
+            best_image = best_current_image
+            best_rotated_image = best_current_rotated_image
         else:
             if best_current_fitness > best_fitness:
                 best_fitness = best_current_fitness
                 best_genotype = best_current_genotype
+                best_image = best_current_image
+                best_rotated_image = best_current_rotated_image
 
         mutation = individual.Mutation(population)
         crossover = individual.Crossover(population, mutation)
-        repeatability_crossover, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
+        repeatability_crossover, _, _, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
         individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
         # Impresión de pantalla con el mejor fitness cada 100 generaciones
@@ -116,29 +104,38 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
             print(f'Best Fitness: {best_fitness}')
+            fin = time.time()
+            print(f'Tiempo: {fin - inicio}')
+            cv2.imshow('Image', best_image)
+            cv2.imshow('Rotated Image', best_rotated_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
             break
         # Impresión de pantalla cuando ya se terminaron las generaciones
         elif generation == GENERATIONS - 1:
             print(f'Best Solution: {best_genotype}')
             print(f'Best Fitness: {best_fitness}')
+            fin = time.time()
+            print(f'Tiempo: {fin - inicio}')
+            cv2.imshow('Image', best_image)
+            cv2.imshow('Rotated Image', best_rotated_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
 if __name__ == '__main__':
     # Parámetros
-    IMG1 = cv2.imread('img/Cuadrado 3.JPG')
+    IMG1 = cv2.imread('img/3317.jpg')
     IMG2 = cv2.imread('img/Rotation.JPG')
     UMBRAL = 0.95
-    POPULATION_SIZE = 10
+    POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
     LOW_LIM = 1
     UP_LIM = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 20
+    GENERATIONS = 10
     TERMINATION_CRITERIA = 95.0
     WR = 3
     KEYPOINTS_NUMBER = 1000
 
     deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, KEYPOINTS_NUMBER)
-
-    fin = time.time()
-    print(f'Tiempo: {fin - inicio}')
