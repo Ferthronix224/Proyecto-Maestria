@@ -30,10 +30,10 @@ def add_gaussian_noise(image, snr_db):
 
     return noisy_image
 
-img = cv2.imread('img/Diapositiva1.JPG')
+img = cv2.imread('../img/Imagen5.jpg')
 img = cv2.resize(img, (500, 500))
-noisy_img = add_gaussian_noise(img, 5)
-cv2.imwrite('img/Noisy.jpg', noisy_img)
+noisy_img = add_gaussian_noise(img, 8)
+cv2.imwrite('../img/Noisy5.jpg', noisy_img)
 cv2.imshow('img/Noisy.jpg', noisy_img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

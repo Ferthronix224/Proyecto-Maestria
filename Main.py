@@ -54,7 +54,7 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number
     return repeatability, filter_MP, images, rotated_images
 
 # Proceso principal de detección de puntos de interés
-def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, keypoints_number):
+def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, keypoints_number, no):
     #  Condicion en caso de que la imagen no se halla encontrado
     if img1 is None or img2 is None:
         raise ValueError("Imagen no encontrada")
@@ -106,10 +106,10 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             print(f'Best Fitness: {best_fitness}')
             fin = time.time()
             print(f'Tiempo: {fin - inicio}')
-            cv2.imshow('Image', best_image)
-            cv2.imshow('Rotated Image', best_rotated_image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            cv2.imwrite(f'Original{no}.jpg', best_image)
+            cv2.imwrite(f'Transformed{no}.jpg', best_rotated_image)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
             break
         # Impresión de pantalla cuando ya se terminaron las generaciones
         elif generation == GENERATIONS - 1:
@@ -117,25 +117,27 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             print(f'Best Fitness: {best_fitness}')
             fin = time.time()
             print(f'Tiempo: {fin - inicio}')
-            cv2.imshow('Image', best_image)
-            cv2.imshow('Rotated Image', best_rotated_image)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            cv2.imwrite(f'Original{no}.jpg', best_image)
+            cv2.imwrite(f'Transformed{no}.jpg', best_rotated_image)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-    # Parámetros
-    IMG1 = cv2.imread('img/3317.jpg')
-    IMG2 = cv2.imread('img/Rotation.JPG')
-    UMBRAL = 0.95
-    POPULATION_SIZE = 20
-    GENOTYPE_LENGTH = 50
-    LOW_LIM = 1
-    UP_LIM = 255
-    F = 0.5  # Xm = Xi + f (x2 - x3)
-    CROSSOVER_RATE = 0.7
-    GENERATIONS = 10
-    TERMINATION_CRITERIA = 95.0
-    WR = 3
-    KEYPOINTS_NUMBER = 1000
+for i in range(2, 6):
+    if __name__ == '__main__':
+        # Parámetros
+        IMG1 = cv2.imread(f'img/Imagen{i}.jpg')
+        IMG2 = cv2.imread(f'img/Scale{i}.jpg')
+        UMBRAL = 0.95
+        POPULATION_SIZE = 20
+        GENOTYPE_LENGTH = 50
+        LOW_LIM = 1
+        UP_LIM = 255
+        F = 0.5  # Xm = Xi + f (x2 - x3)
+        CROSSOVER_RATE = 0.7
+        GENERATIONS = 1
+        TERMINATION_CRITERIA = 95.0
+        WR = 3
+        KEYPOINTS_NUMBER = 10000
+        no = i
 
-    deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, KEYPOINTS_NUMBER)
+        deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, KEYPOINTS_NUMBER, no)

@@ -1,6 +1,6 @@
 import cv2
 
-image = cv2.imread('../img/3317.jpg')
+image = cv2.imread('../img/Imagen5.jpg')
 
 # Ángulo de rotación en grados
 angle_degrees = 5
@@ -15,8 +15,8 @@ center = (width // 2, height // 2)
 rotation_matrix = cv2.getRotationMatrix2D(center, angle_degrees, scale=1.0)
 
 # Aplicar la rotación
-border_color = (255, 255, 255)
+border_color = (0, 0, 0)
 rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height), borderMode=cv2.BORDER_CONSTANT, borderValue=border_color)  # Rellenar con blanco
 
 # Guardar imagen rotada
-cv2.imwrite('../img/Rotation.JPG', rotated_image)
+cv2.imwrite('../img/Rotation5.JPG', rotated_image)

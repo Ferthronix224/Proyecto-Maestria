@@ -7,8 +7,9 @@ import numpy as np
 def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoints_number):
     if len(rotated_keypoints) > keypoints_number or len(keypoints) > keypoints_number or len(keypoints) == 0 or len(rotated_keypoints) == 0 or type(image) is int or type(rotated_image) is int:
         return 0, 0, 0
-    original_keypoints_rotated = rotation(keypoints)
-    distances = np.linalg.norm(original_keypoints_rotated[:, np.newaxis] - rotated_keypoints, axis=2)
+    distances = np.linalg.norm(keypoints[:, np.newaxis] - rotated_keypoints, axis=2)
+    # original_keypoints_rotated = rotation(keypoints)
+    # distances = np.linalg.norm(original_keypoints_rotated[:, np.newaxis] - rotated_keypoints, axis=2)
     matches = distances <= 5
     good_matches = 0
 
