@@ -39,7 +39,7 @@ def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoint
     if good_matches == 0:
         repeatability = 0
     else:
-        repeatability = (good_matches / min(len(keypoints), len(rotated_keypoints))) * 100
+        repeatability = (good_matches / max(len(keypoints), len(rotated_keypoints))) * 100
 
     return repeatability, image, rotated_image
 

@@ -6,8 +6,6 @@ from Fitness import Flanned_Matcher
 import Filters as ft
 import time
 
-inicio = time.time()
-
 def detectar_puntos_de_interes(magnitud, umbral):
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
     mask = magnitud > umbral
@@ -55,6 +53,7 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number
 
 # Proceso principal de detección de puntos de interés
 def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, keypoints_number, no):
+    inicio = time.time()
     #  Condicion en caso de que la imagen no se halla encontrado
     if img1 is None or img2 is None:
         raise ValueError("Imagen no encontrada")
@@ -122,11 +121,11 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
 
-for i in range(2, 6):
+for i in range(1, 6):
     if __name__ == '__main__':
         # Parámetros
         IMG1 = cv2.imread(f'img/Imagen{i}.jpg')
-        IMG2 = cv2.imread(f'img/Scale{i}.jpg')
+        IMG2 = cv2.imread(f'img/Rotation{i}.jpg')
         UMBRAL = 0.95
         POPULATION_SIZE = 20
         GENOTYPE_LENGTH = 50
@@ -134,7 +133,7 @@ for i in range(2, 6):
         UP_LIM = 255
         F = 0.5  # Xm = Xi + f (x2 - x3)
         CROSSOVER_RATE = 0.7
-        GENERATIONS = 1
+        GENERATIONS = 100
         TERMINATION_CRITERIA = 95.0
         WR = 3
         KEYPOINTS_NUMBER = 10000
