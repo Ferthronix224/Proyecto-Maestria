@@ -8,8 +8,6 @@ def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoint
     if len(rotated_keypoints) > keypoints_number or len(keypoints) > keypoints_number or len(keypoints) == 0 or len(rotated_keypoints) == 0 or type(image) is int or type(rotated_image) is int:
         return 0, 0, 0
     distances = np.linalg.norm(keypoints[:, np.newaxis] - rotated_keypoints, axis=2)
-    # original_keypoints_rotated = rotation(keypoints)
-    # distances = np.linalg.norm(original_keypoints_rotated[:, np.newaxis] - rotated_keypoints, axis=2)
     matches = distances <= 5
     good_matches = 0
 
@@ -42,25 +40,6 @@ def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoint
         repeatability = (good_matches / max(len(keypoints), len(rotated_keypoints))) * 100
 
     return repeatability, image, rotated_image
-
-def rotation(image):
-    image = image.astype(int)
-    # Ángulo de rotación en grados
-    angle_degrees = 5
-
-    # Obtener las dimensiones de la imagen
-    height, width = image.shape[:2]
-
-    # Calcular el centro de la imagen
-    center = (width // 2, height // 2)
-
-    # Obtener la matriz de rotación
-    rotation_matrix = cv2.getRotationMatrix2D(center, angle_degrees, scale=1.0)
-
-    image = np.float32(image)
-
-    # Aplicar la rotación
-    return cv2.warpAffine(image, rotation_matrix, (width, height))
 
 def distancia_euclidiana(coord1, coord2):
     return math.sqrt((coord1[0] - coord2[0]) ** 2 + (coord1[1] - coord2[1]) ** 2)
