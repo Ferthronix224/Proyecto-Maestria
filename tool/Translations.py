@@ -1,9 +1,13 @@
 import cv2
 import numpy as np
 
-A = cv2.imread('../img/Imagen5.jpg')
-A = cv2.cvtColor(A, cv2.COLOR_BGR2GRAY)
-B = np.ones((256, 256))
-B[19:255, 19:255] = A[:236, :236]
-B = np.uint8(B)
-cv2.imwrite('../img/Translation5.jpg', B)
+def translate(image, pixel_number):
+    rows, cols, _ = image.shape
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    traslation = np.ones((rows, cols))
+    traslation[pixel_number:rows, pixel_number:cols] = image[:rows - pixel_number, :cols - pixel_number]
+    traslation = np.uint8(traslation)
+    return traslation
+
+translation = translate(cv2.imread('../img/Imagen1.jpg'), 50)
+cv2.imwrite('Translation.jpg', translation)

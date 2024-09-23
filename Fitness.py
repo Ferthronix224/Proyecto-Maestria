@@ -4,9 +4,10 @@ import math
 import numpy as np
 
 # Función que retorna la imagen con las coincidencias y la tasa de repetibilidad
-def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoints_number):
-    if len(rotated_keypoints) > keypoints_number or len(keypoints) > keypoints_number or len(keypoints) == 0 or len(rotated_keypoints) == 0 or type(image) is int or type(rotated_image) is int:
+def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
+    if len(rotated_keypoints) > up_keypoints_number or len(keypoints) > up_keypoints_number or len(rotated_keypoints) < low_keypoints_number or len(keypoints) < low_keypoints_number or len(keypoints) == 0 or len(rotated_keypoints) == 0 or type(image) is int or type(rotated_image) is int:
         return 0, 0, 0
+    keypoints = transformation(keypoints, transformation_value)
     distances = np.linalg.norm(keypoints[:, np.newaxis] - rotated_keypoints, axis=2)
     matches = distances <= 5
     good_matches = 0
@@ -23,7 +24,7 @@ def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoint
             image = cv2.circle(image, center=(y, x), radius=5, color=(0, 255, 0), thickness=-1)
         else:
             x, y = keypoints[i].ravel().astype(int)
-            image = cv2.circle(image, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
+            image = cv2.circle(image, center=(y, x), radius=5, color=(0, 0, 255), thickness=1)
 
     for i, match in enumerate(matches.transpose()):
         if True in match:
@@ -31,7 +32,7 @@ def Flanned_Matcher(image, rotated_image, keypoints, rotated_keypoints, keypoint
             rotated_image = cv2.circle(rotated_image, center=(y, x), radius=5, color=(0, 255, 0), thickness=-1)
         else:
             x, y = rotated_keypoints[i].ravel().astype(int)
-            rotated_image = cv2.circle(rotated_image, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
+            rotated_image = cv2.circle(rotated_image, center=(y, x), radius=5, color=(0, 0, 255), thickness=1)
 
     # Calcular tasa de repetibilidad
     if good_matches == 0:

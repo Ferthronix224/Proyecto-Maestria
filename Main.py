@@ -5,6 +5,7 @@ import DE
 from Fitness import Flanned_Matcher
 import Filters as ft
 import time
+import Transformations as tr
 
 def detectar_puntos_de_interes(magnitud, umbral):
     # Crear una máscara booleana donde los elementos mayores que el umbral son True
@@ -28,7 +29,7 @@ def evaluation(img, filter):
         return 0
     return eval(filter)
 
-def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number):
+def repetibilidad(population, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
     # Proceso de mapeo
     filter_MP = [MP.generate(population[i], wr) for i in range(len(population))]
 
@@ -47,12 +48,12 @@ def repetibilidad(population, img1, img2, umbral_deteccion, wr, keypoints_number
     puntos_de_interes_2 = [detectar_puntos_de_interes(filtro2_normalizada[i], umbral_deteccion) for i in
                            range(len(filtro2_normalizada))]
 
-    repeatability, images, rotated_images = zip(*[Flanned_Matcher(img1.copy(), img2.copy(), puntos_de_interes_1[i], puntos_de_interes_2[i], keypoints_number) for i in range(len(filter_MP))])
+    repeatability, images, rotated_images = zip(*[Flanned_Matcher(img1.copy(), img2.copy(), puntos_de_interes_1[i], puntos_de_interes_2[i], low_keypoints_number, up_keypoints_number, transformation, transformation_value) for i in range(len(filter_MP))])
 
     return repeatability, filter_MP, images, rotated_images
 
 # Proceso principal de detección de puntos de interés
-def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, keypoints_number, no):
+def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, low_keypoints_number, up_keypoints_number, no, transformation, transformation_value):
     inicio = time.time()
     #  Condicion en caso de que la imagen no se halla encontrado
     if img1 is None or img2 is None:
@@ -72,7 +73,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
     # Se hace un ciclo con el rango de las generaciones establecidas
     for generation in range(generations):
-        repeatability_population, filter_M, images, rotated_images = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
+        repeatability_population, filter_M, images, rotated_images = repetibilidad(population, img1.copy(), img2.copy(), umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         best_current_fitness = max(repeatability_population)
         best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
         best_current_image = images[repeatability_population.index(best_current_fitness)]
@@ -92,7 +93,7 @@ def deteccion_de_puntos_de_interes(img1, img2, umbral_deteccion, population_size
 
         mutation = individual.Mutation(population)
         crossover = individual.Crossover(population, mutation)
-        repeatability_crossover, _, _, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr, keypoints_number)
+        repeatability_crossover, _, _, _ = repetibilidad(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         individual.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
         # Impresión de pantalla con el mejor fitness cada 100 generaciones
@@ -125,18 +126,21 @@ for i in range(1, 6):
     if __name__ == '__main__':
         # Parámetros
         IMG1 = cv2.imread(f'img/Imagen{i}.jpg')
-        IMG2 = cv2.imread(f'img/Rotation{i}.jpg')
+        IMG2 = cv2.imread(f'img/Rotation{i}.JPG')
         UMBRAL = 0.95
         POPULATION_SIZE = 20
         GENOTYPE_LENGTH = 50
-        LOW_LIM = 1
-        UP_LIM = 255
+        LOW_LIM_GEN = 1
+        UP_LIM_GEN = 255
         F = 0.5  # Xm = Xi + f (x2 - x3)
         CROSSOVER_RATE = 0.7
         GENERATIONS = 100
         TERMINATION_CRITERIA = 95.0
         WR = 3
-        KEYPOINTS_NUMBER = 5000
+        LOW_LIM_KN = 10  # KN -> Keypoints Number
+        UP_LIM_KN = 3000
         no = i
+        TRANSFORMATION = tr.rotation
+        TRANSFORMATION_VALUE = 45
 
-        deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM, UP_LIM, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, KEYPOINTS_NUMBER, no)
+        deteccion_de_puntos_de_interes(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, no, TRANSFORMATION, TRANSFORMATION_VALUE)
