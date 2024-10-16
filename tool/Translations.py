@@ -9,5 +9,6 @@ def translate(image, pixel_number):
     traslation = np.uint8(traslation)
     return traslation
 
-translation = translate(cv2.imread('../img/Imagen1.jpg'), 50)
-cv2.imwrite('Translation.jpg', translation)
+for i in range(1, 6):
+    translation = translate(cv2.imread(f'../img/Imagen{i}.jpg'), 20)
+    cv2.imwrite(f'../img/Translation{i}.jpg', translation)

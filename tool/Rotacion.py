@@ -18,5 +18,6 @@ def rotation(image, degree):
 
     return rotated_image
 
-rotated_image = rotation(cv2.imread('../img/Imagen5.jpg'), degree=45)
-cv2.imwrite('../img/Rotation5.JPG', rotated_image)
+for i in range(1, 6):    
+    rotated_image = rotation(cv2.imread(f'../img/Imagen{i}.jpg'), degree=-45)
+    cv2.imwrite(f'../img/Rotation{i}.JPG', rotated_image)

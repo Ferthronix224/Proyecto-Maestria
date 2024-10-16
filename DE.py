@@ -2,17 +2,28 @@
 import numpy as np
 
 
-class Individual:
+class Genotype:
+    """
+    Class Genotype to aplicate Differential Evolution
+
+    :param population_size: Number of individuals
+    :param dimension: Number of codons in a individual
+    :param low_lim: Lower value in a codon
+    :param up_lim: Upper value in a codon
+    :param F: Constant requiere in Mutation fuction
+    :param CR: Crossover rate
+    """
+
     def __init__(self, population_size, dimension, low_lim, up_lim, F, CR):
         self.population_size = population_size
+        self.dimension = dimension
         self.low_lim = low_lim
         self.up_lim = up_lim
-        self.dimension = dimension
-        self.CR = CR
         self.F = F
+        self.CR = CR
 
     def random_genotype(self, low_lim, up_lim, dimension):
-        return np.random.uniform(low=low_lim, high=up_lim, size=dimension)
+        return np.random.randint(low=low_lim, high=up_lim, size=dimension)
 
     def init_population(self):
         return [self.random_genotype(self.low_lim, self.up_lim, self.dimension) for _ in range(self.population_size)]
@@ -38,6 +49,6 @@ class Individual:
         return np.array(cross_population)
 
     def Selection(self, population, cross_population, population_fitness, crossover_fitness):
-        for i in range(len(population)):
+        for i in range(len(population_fitness)):
             if crossover_fitness[i] >= population_fitness[i]:
                 population[i] = cross_population[i]

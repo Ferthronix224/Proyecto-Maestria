@@ -5,10 +5,8 @@ def scale(image, scale_value):
     # Obtener las dimensiones originales de la imagen
     original_height, original_width = image.shape[:2]
 
-    # Definir las nuevas dimensiones deseadas (por ejemplo, reducir el tamaño)
-    scale_percent = scale_value  # Escalar al 50%
-    new_width = int(original_width * scale_percent)
-    new_height = int(original_height * scale_percent)
+    new_width = int(original_width * scale_value / 100)
+    new_height = int(original_height * scale_value / 100)
 
     # Redimensionar la imagen manteniendo la proporción
     resized_image = cv2.resize(image, (new_width, new_height), interpolation=cv2.INTER_AREA)
@@ -24,5 +22,6 @@ def scale(image, scale_value):
     output_image[y_offset:y_offset+new_height, x_offset:x_offset+new_width] = resized_image
     return output_image
 
-scale = scale(cv2.imread('../img/Imagen1.jpg'), 0.8)
-cv2.imwrite('Scale.jpg', scale)
+for i in range(1, 6):
+    image = scale(cv2.imread(f'../img/Imagen{i}.jpg'), 75)
+    cv2.imwrite(f'../img/Scale{i}.jpg', image)
