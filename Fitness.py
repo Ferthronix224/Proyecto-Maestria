@@ -21,9 +21,6 @@ class Fitness:
             return 0, 0, 0
         
         original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
-
-        print('Trans', self.transformed_keypoints)
-        print('Ori Trans',original_transformed_keypoints)
         distances = np.linalg.norm(original_transformed_keypoints[:, np.newaxis] - self.transformed_keypoints, axis=2)
         matches = distances == 0
         good_matches = 0
