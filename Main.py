@@ -76,8 +76,8 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
 
 if __name__ == '__main__':
     # Parameters
-    IMG1 = cv2.imread('img/Imagen2.jpg')
-    IMG2 = cv2.imread('img/Translation2.jpg')
+    IMG1 = cv2.imread('img/Imagen3.jpg')
+    IMG2 = cv2.imread('img/Scale3.jpg')
     UMBRAL = 0.95
     POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
@@ -85,12 +85,12 @@ if __name__ == '__main__':
     UP_LIM_GEN = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 10
+    GENERATIONS = 100
     TERMINATION_CRITERIA = 95.0
     WR = 3
-    LOW_LIM_KN = 1  # KN -> Keypoints Number
+    LOW_LIM_KN = 100  # KN -> Keypoints Number
     UP_LIM_KN = 3000
-    TRANSFORMATION = tr.translate
-    TRANSFORMATION_VALUE = 20
+    TRANSFORMATION = tr.scale
+    TRANSFORMATION_VALUE = 0.8
 
     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)

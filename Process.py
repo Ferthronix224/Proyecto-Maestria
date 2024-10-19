@@ -17,6 +17,8 @@ def normalizar(matriz):
         return 0
     min_val = np.min(matriz)
     max_val = np.max(matriz)
+    if min_val == np.nan or max_val == np.nan or max_val == 0.0 or min_val == -np.inf or max_val == np.inf:
+        return 0
     matriz_normalizada = (matriz - min_val) / (max_val - min_val)
     return matriz_normalizada
 
@@ -29,7 +31,7 @@ def repeatability(population, img1, img2, umbral_deteccion, wr, low_keypoints_nu
     # Proceso de mapeo
     filter_MP = [MP().generate(population[i], wr) for i in range(len(population))]
     # filter_MP = ['ft.Gau1(img-ft.Log(ft.Gau1(ft.Lap(ft.Gau2(ft.Gau1(ft.Gau2(ft.Gau1(img))+ft.Gau2(ft.Gau2(img)))/ft.LapG1(img))))))']
-
+    
     img1 = np.where(img1 == 0, 1e-4, img1)
     img2 = np.where(img2 == 0, 1e-4, img2)
     # Evaluacion de los filtros

@@ -20,7 +20,7 @@ def rotation(coordenadas, angulo_grados):
                   [np.sin(angulo_radianes), np.cos(angulo_radianes)]])
     
     # Desplazamiento del centro si no es el origen
-    centro = np.array((0, 0))
+    centro = np.array((128, 128))
     
     # Aplicar la rotación a cada punto
     nuevas_coordenadas = []
@@ -34,3 +34,27 @@ def rotation(coordenadas, angulo_grados):
         nuevas_coordenadas.append(nueva_coordenada.tolist())
     
     return np.array(nuevas_coordenadas)
+
+def scale(coordenadas, escala):
+    """
+    Escala una matriz de coordenadas en torno a un centro (cx, cy) y factores de escala sx, sy.
+    
+    matriz: np.array de tamaño (N, 2), donde N es el número de puntos, con columnas (x, y).
+    escala: Factores de escala 
+    """
+    coordenadas = coordenadas.astype(float)
+    # Crear una copia de la matriz para no modificar la original
+    matriz_escalada = np.copy(coordenadas)
+    
+    # Restar el centro de escala
+    matriz_escalada[:, 0] -= 128  # Restar cx de todas las coordenadas x
+    matriz_escalada[:, 1] -= 128  # Restar cy de todas las coordenadas y
+
+    # Aplicar el factor de escala a las coordenadas x e y
+    matriz_escalada[:, :] *= escala  # Escalar las coordenadas y por sy
+
+    # Volver a trasladar al sistema original sumando el centro de escala
+    matriz_escalada[:, 0] += 128  # Sumar cx a todas las coordenadas x
+    matriz_escalada[:, 1] += 128  # Sumar cy a todas las coordenadas y
+
+    return np.array(matriz_escalada.astype(int))

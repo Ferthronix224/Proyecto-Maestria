@@ -31,5 +31,5 @@ def add_gaussian_noise(image, snr_db):
     return noisy_image
 
 for i in range(1, 6):
-    noisy_img = add_gaussian_noise(cv2.imread(f'../img/Imagen{i}.jpg'), 10)
+    noisy_img = add_gaussian_noise(cv2.imread(f'../img/Imagen{i}.jpg'), 5)
     cv2.imwrite(f'../img/Noisy{i}.jpg', noisy_img)

@@ -22,7 +22,7 @@ class Fitness:
         
         original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
         distances = np.linalg.norm(original_transformed_keypoints[:, np.newaxis] - self.transformed_keypoints, axis=2)
-        matches = distances == 0
+        matches = distances <= 3
         good_matches = 0
 
         self.image = np.uint8(self.image)
@@ -34,18 +34,18 @@ class Fitness:
             if True in match:
                 good_matches += 1
                 x, y = self.keypoints[i].ravel().astype(int)
-                self.image = cv2.circle(self.image, center=(y, x), radius=5, color=(0, 255, 0), thickness=-1)
+                self.image = cv2.circle(self.image, center=(y, x), radius=1, color=(0, 255, 0), thickness=-1, )
             else:
                 x, y = self.keypoints[i].ravel().astype(int)
-                self.image = cv2.circle(self.image, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
+                self.image = cv2.circle(self.image, center=(y, x), radius=1, color=(0, 0, 255), thickness=-1)
 
         for i, match in enumerate(matches.transpose()):
             if True in match:
                 x, y = self.transformed_keypoints[i].ravel().astype(int)
-                self.transformed_image = cv2.circle(self.transformed_image, center=(y, x), radius=5, color=(0, 255, 0), thickness=-1)
+                self.transformed_image = cv2.circle(self.transformed_image, center=(y, x), radius=1, color=(0, 255, 0), thickness=-1)
             else:
                 x, y = self.transformed_keypoints[i].ravel().astype(int)
-                self.transformed_image = cv2.circle(self.transformed_image, center=(y, x), radius=5, color=(0, 0, 255), thickness=-1)
+                self.transformed_image = cv2.circle(self.transformed_image, center=(y, x), radius=1, color=(0, 0, 255), thickness=-1)
 
         # Calcular tasa de repetibilidad
         if good_matches == 0:
