@@ -10,5 +10,6 @@ def translate(image, pixel_number):
     return traslation
 
 for i in range(1, 6):
-    translation = translate(cv2.imread(f'../img/Imagen{i}.jpg'), 20)
+    values = [10, 20, 30, 40, 50]
+    translation = translate(cv2.imread(f'../img/img{i}.jpg'), values[i - 1])
     cv2.imwrite(f'../img/Translation{i}.jpg', translation)

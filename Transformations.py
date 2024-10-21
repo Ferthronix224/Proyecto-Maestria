@@ -47,14 +47,14 @@ def scale(coordenadas, escala):
     matriz_escalada = np.copy(coordenadas)
     
     # Restar el centro de escala
-    matriz_escalada[:, 0] -= 128  # Restar cx de todas las coordenadas x
-    matriz_escalada[:, 1] -= 128  # Restar cy de todas las coordenadas y
+    matriz_escalada[:, 0] -= 128
+    matriz_escalada[:, 1] -= 128
 
     # Aplicar el factor de escala a las coordenadas x e y
-    matriz_escalada[:, :] *= escala  # Escalar las coordenadas y por sy
+    matriz_escalada[:, :] *= escala / 100
 
     # Volver a trasladar al sistema original sumando el centro de escala
-    matriz_escalada[:, 0] += 128  # Sumar cx a todas las coordenadas x
-    matriz_escalada[:, 1] += 128  # Sumar cy a todas las coordenadas y
+    matriz_escalada[:, 0] += 128
+    matriz_escalada[:, 1] += 128
 
     return np.array(matriz_escalada.astype(int))
