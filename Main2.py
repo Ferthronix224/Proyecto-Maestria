@@ -5,6 +5,9 @@ import time
 from DE import Genotype
 import Transformations as tr
 import Process as pr
+import warnings
+warnings.filterwarnings('ignore', category=RuntimeWarning)
+
 
 # Main process for interest point detection
 def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value, no):
@@ -51,9 +54,6 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         repeatability_crossover, _, _, _ = pr.repeatability(crossover, img1.copy(), img2.copy(), umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         genotype.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
-        # Console output with the best fitness every 10 generations
-        if (generation + 1) % 10 == 0:
-            print(f'Generation {generation + 1}: Best Fitness = {best_current_fitness}')
         # Stopping criterion when the best solution has been found
         if best_fitness >= termination_criteria:
             print(f'Generation {generation + 1}')
@@ -61,8 +61,8 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Best Fitness: {best_fitness}')
             end = time.time()
             print(f'Time: {end - start}')
-            cv2.imwrite(f'Original{no}.jpg', best_image)
-            cv2.imwrite(f'Transformed{no}.jpg', best_rotated_image)
+            cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
+            cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
             break
         # Console output when all generations have finished        
         elif generation == GENERATIONS - 1:
@@ -71,17 +71,17 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Best Fitness: {best_fitness}')
             end = time.time()
             print(f'Time: {end - start}')
-            cv2.imwrite(f'Original{no}.jpg', best_image)
-            cv2.imwrite(f'Transformed{no}.jpg', best_rotated_image)
+            cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
+            cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
 
 # Procesar varias imagenes a la vez y distintas transformaciones
-for i in range(1, 6):
+for i in range(1, 293):
     print(f'Imagen {i}')
     if __name__ == '__main__':
         # Parameters
-        IMG1 = cv2.imread(f'img/img{i}.jpg')
-        IMG2 = cv2.imread(f'img/Translation{i}.jpg')
-        TRANSFORMATIONS = [10, 20, 30, 40, 50]
+        IMG1 = cv2.imread(f'img/originals/Image_{i}.jpg')
+        IMG2 = cv2.imread(f'img/rotation/Rotation_{i}.jpg')
+        # TRANSFORMATIONS = [90, 80, 70, 60, 50]
         UMBRAL = 0.95
         POPULATION_SIZE = 20
         GENOTYPE_LENGTH = 50
@@ -94,8 +94,8 @@ for i in range(1, 6):
         WR = 3
         LOW_LIM_KN = 100  # KN -> Keypoints Number
         UP_LIM_KN = 3000
-        TRANSFORMATION = tr.translate
-        TRANSFORMATION_VALUE = TRANSFORMATIONS[i - 1]
+        TRANSFORMATION = tr.rotation
+        TRANSFORMATION_VALUE = 30
         no = i
 
         main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE, no)

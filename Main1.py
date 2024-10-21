@@ -5,6 +5,10 @@ import time
 from DE import Genotype
 import Transformations as tr
 import Process as pr
+import warnings
+
+warnings.filterwarnings('ignore', category=RuntimeWarning)
+
 
 # Main process for interest point detection
 def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
@@ -58,9 +62,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         if best_fitness >= termination_criteria:
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
-            print(f'Best Fitness: {best_fitness}')
+            print(f'Best Fitness: {best_fitness:.2f}%')
             end = time.time()
-            print(f'Time: {end - start}')
+            print(f'Time: {end - start:.2f} segundos')
             cv2.imwrite(f'Original.jpg', best_image)
             cv2.imwrite(f'Transformed.jpg', best_rotated_image)
             break
@@ -68,16 +72,16 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         elif generation == GENERATIONS - 1:
             print(f'Generation {GENERATIONS}')
             print(f'Best Solution: {best_genotype}')
-            print(f'Best Fitness: {best_fitness}')
+            print(f'Best Fitness: {best_fitness:2f}%')
             end = time.time()
-            print(f'Time: {end - start}')
+            print(f'Time: {end - start:.2f} segundos')
             cv2.imwrite(f'Original.jpg', best_image)
             cv2.imwrite(f'Transformed.jpg', best_rotated_image)
 
 if __name__ == '__main__':
     # Parameters
-    IMG1 = cv2.imread('img/img1.jpg')
-    IMG2 = cv2.imread('img/Noisy1.jpg')
+    IMG1 = cv2.imread('img/originals/Image_97.jpg')
+    IMG2 = cv2.imread('img/scale/Scale_97.jpg')
     UMBRAL = 0.95
     POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
@@ -90,7 +94,7 @@ if __name__ == '__main__':
     WR = 3
     LOW_LIM_KN = 100  # KN -> Keypoints Number
     UP_LIM_KN = 3000
-    TRANSFORMATION = tr.translate
-    TRANSFORMATION_VALUE = 1
+    TRANSFORMATION = tr.scale
+    TRANSFORMATION_VALUE = 50
 
     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
