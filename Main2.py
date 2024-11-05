@@ -1,11 +1,12 @@
 # Libraries
 import cv2 
 import time
+import warnings
 # Scripts
 from DE import Genotype
 import Transformations as tr
 import Process as pr
-import warnings
+
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 
 
