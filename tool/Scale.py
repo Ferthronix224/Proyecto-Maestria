@@ -22,7 +22,7 @@ def scale(image, scale_value):
     output_image[y_offset:y_offset+new_height, x_offset:x_offset+new_width] = resized_image
     return output_image
 
-for i in range(97, 98):
-    values = [90, 80, 70, 60, 50]
-    image = scale(cv2.imread(f'../img/originals/Image_{i}.jpg'), 50)
-    cv2.imwrite(f'../img/scale/Scale_{i}.jpg', image)
+for i in range(1, 293):
+    #values = [90, 80, 70, 60, 50]
+    image = scale(cv2.imread(f'../img/originals/{i}.jpg'), 85)
+    cv2.imwrite(f'../img/scale/{i}.jpg', image)
