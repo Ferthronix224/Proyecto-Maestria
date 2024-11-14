@@ -20,8 +20,6 @@ class Fitness:
         if any([len(self.transformed_keypoints) > self.up_keypoints_number, len(self.keypoints) > self.up_keypoints_number, len(self.transformed_keypoints) < self.low_keypoints_number, len(self.keypoints) < self.low_keypoints_number, len(self.keypoints) == 0, len(self.transformed_keypoints) == 0, type(self.image) is int, type(self.transformed_image) is int]):
             return 0, 0, 0
         
-        print(f'Keypoints: {self.keypoints}')
-        print(f'Transformed_Keypoints: {self.transformed_keypoints}')
         original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
         distances = np.linalg.norm(original_transformed_keypoints[:, np.newaxis] - self.transformed_keypoints, axis=2)
         matches = distances <= 3

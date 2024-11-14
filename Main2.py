@@ -59,9 +59,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         if best_fitness >= termination_criteria:
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
-            print(f'Best Fitness: {best_fitness}')
+            print(f'Best Fitness: {best_fitness:.2f}%')
             end = time.time()
-            print(f'Time: {end - start}')
+            print(f'Time: {end - start:.2f} segundos')
             cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
             cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
             break
@@ -69,9 +69,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         elif generation == GENERATIONS - 1:
             print(f'Generation {GENERATIONS}')
             print(f'Best Solution: {best_genotype}')
-            print(f'Best Fitness: {best_fitness}')
+            print(f'Best Fitness: {best_fitness:.2f}%')
             end = time.time()
-            print(f'Time: {end - start}')
+            print(f'Time: {end - start:.2f} segundos')
             cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
             cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
 
@@ -80,8 +80,8 @@ for i in range(1, 293):
     print(f'Imagen {i}')
     if __name__ == '__main__':
         # Parameters
-        IMG1 = cv2.imread(f'img/originals/Image_{i}.jpg')
-        IMG2 = cv2.imread(f'img/rotation/Rotation_{i}.jpg')
+        IMG1 = cv2.imread(f'img/originals/{i}.jpg')
+        IMG2 = cv2.imread(f'img/scale/{i}.jpg')
         # TRANSFORMATIONS = [90, 80, 70, 60, 50]
         UMBRAL = 0.95
         POPULATION_SIZE = 20
@@ -95,8 +95,8 @@ for i in range(1, 293):
         WR = 3
         LOW_LIM_KN = 100  # KN -> Keypoints Number
         UP_LIM_KN = 3000
-        TRANSFORMATION = tr.rotation
-        TRANSFORMATION_VALUE = 30
+        TRANSFORMATION = tr.scale
+        TRANSFORMATION_VALUE = 90
         no = i
 
         main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE, no)

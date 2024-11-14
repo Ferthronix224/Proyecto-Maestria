@@ -23,6 +23,5 @@ def scale(image, scale_value):
     return output_image
 
 for i in range(1, 293):
-    #values = [90, 80, 70, 60, 50]
-    image = scale(cv2.imread(f'../img/originals/{i}.jpg'), 85)
+    image = scale(cv2.imread(f'../img/originals/{i}.jpg'), 90)
     cv2.imwrite(f'../img/scale/{i}.jpg', image)

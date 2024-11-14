@@ -30,7 +30,6 @@ def evaluation(img, filter):
 def repeatability(population, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
     # Proceso de mapeo
     filter_MP = [MP().generate(population[i], wr) for i in range(len(population))]
-    # filter_MP = ['ft.Gau1(img-ft.Log(ft.Gau1(ft.Lap(ft.Gau2(ft.Gau1(ft.Gau2(ft.Gau1(img))+ft.Gau2(ft.Gau2(img)))/ft.LapG1(img))))))']
     
     img1 = np.where(img1 == 0, 1e-4, img1)
     img2 = np.where(img2 == 0, 1e-4, img2)
