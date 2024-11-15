@@ -21,6 +21,10 @@ class Fitness:
             return 0, 0, 0
         
         original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
+        print('original')
+        print(original_transformed_keypoints)
+        print('transformed')
+        print(self.transformed_keypoints)
         distances = np.linalg.norm(original_transformed_keypoints[:, np.newaxis] - self.transformed_keypoints, axis=2)
         matches = distances <= 3
         good_matches = 0
@@ -46,7 +50,9 @@ class Fitness:
             else:
                 x, y = self.transformed_keypoints[i].ravel().astype(int)
                 self.transformed_image = cv2.circle(self.transformed_image, center=(y, x), radius=1, color=(0, 0, 255), thickness=-1)
-
+        print('good',good_matches)
+        print(len(self.keypoints))
+        print(len(self.transformed_keypoints))
         # Calcular tasa de repetibilidad
         if good_matches == 0:
             repeatability = 0

@@ -80,8 +80,8 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
 
 if __name__ == '__main__':
     # Parameters
-    IMG1 = cv2.imread('img/originals/24.jpg')
-    IMG2 = cv2.imread('img/rotation/24.jpg')
+    IMG1 = cv2.imread('img/originals/25.jpg')
+    IMG2 = cv2.imread('img/rotation/25.jpg')
     UMBRAL = 0.95
     POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
@@ -89,12 +89,12 @@ if __name__ == '__main__':
     UP_LIM_GEN = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 100
+    GENERATIONS = 50
     TERMINATION_CRITERIA = 95.0
     WR = 3
     LOW_LIM_KN = 100  # KN -> Keypoints Number
-    UP_LIM_KN = 3000
+    UP_LIM_KN = 500
     TRANSFORMATION = tr.rotation
-    TRANSFORMATION_VALUE = 15
+    TRANSFORMATION_VALUE = 30
 
     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, TERMINATION_CRITERIA, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
