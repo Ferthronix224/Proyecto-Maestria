@@ -31,8 +31,8 @@ def repeatability(population, img1, img2, umbral_deteccion, wr, low_keypoints_nu
     # Proceso de mapeo
     filter_MP = [MP().generate(population[i], wr) for i in range(len(population))]
     
-    img1 = [np.where(img1[i] == 0, 1e-4, img1[i]) for i in range(len(img1[i]))]
-    img2 = [np.where(img2[i] == 0, 1e-4, img2[i]) for i in range(len(img2[i]))]
+    img1 = [np.where(img1[i] == 0, 1e-4, img1[i]) for i in range(len(img1))]
+    img2 = [np.where(img2[i] == 0, 1e-4, img2[i]) for i in range(len(img2))]
     # Evaluacion de los filtros
     # Cambiar el argumento de filter_MP si se quiere un filtro en especifico
     filtro1 = [[evaluation(img1[ii].copy(), filter_MP[i]) for ii in range(len(img1))] for i in range(len(filter_MP))]

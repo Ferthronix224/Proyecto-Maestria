@@ -15,7 +15,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
     # Start timer
     start = time.time()
     # Condition in case the image was not found
-    if any([None in img1, img2 in None]):
+    img_lists = [img1, img2]
+
+    if any(img is None for img_list in img_lists for img in img_list):
         raise ValueError("Image not found")
 
     # Population creation through differential evolution
@@ -69,8 +71,8 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
 
 if __name__ == '__main__':
     # Parameters
-    IMG1 = [cv2.imread(f'img/originals/{i}.jpg', cv2.IMREAD_GRAYSCALE)for _ in range(1, 11)]
-    IMG2 = [cv2.imread(f'img/rotation/{i}.jpg', cv2.IMREAD_GRAYSCALE) for _ in range(1, 11)]
+    IMG1 = [cv2.imread(f'img/originals/{i}.jpg', cv2.IMREAD_GRAYSCALE)for i in range(1, 11)]
+    IMG2 = [cv2.imread(f'img/rotation/{i}.jpg', cv2.IMREAD_GRAYSCALE) for i in range(1, 11)]
     UMBRAL = 0.95
     POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
