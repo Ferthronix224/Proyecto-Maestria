@@ -39,15 +39,15 @@ def repeatability(population, img1, img2, umbral_deteccion, wr, low_keypoints_nu
     filtro2 = [[evaluation(img2[ii].copy(), filter_MP[i]) for ii in range(len(img2))] for i in range(len(filter_MP))]
 
     # Normalización de los datos
-    filtro1_normalizada = [[normalizar(filtro1[i]) for ii in range()] for i in range(len(filtro1))]
-    filtro2_normalizada = [normalizar(filtro2[i]) for i in range(len(filtro2))]
+    filtro1_normalizada = [[normalizar(filtro1[i][ii]) for ii in range(len(filtro1[0]))] for i in range(len(filtro1))]
+    filtro2_normalizada = [[normalizar(filtro2[i][ii]) for ii in range(len(filtro2[0]))] for i in range(len(filtro2))]
 
     # Detectar puntos de interés basados en la magnitud
-    puntos_de_interes_1 = [detectar_puntos_de_interes(filtro1_normalizada[i], umbral_deteccion) for i in
-                           range(len(filtro1_normalizada))]
-    puntos_de_interes_2 = [detectar_puntos_de_interes(filtro2_normalizada[i], umbral_deteccion) for i in
-                           range(len(filtro2_normalizada))]
+    puntos_de_interes_1 = [[detectar_puntos_de_interes(filtro1_normalizada[i][ii], umbral_deteccion) for ii in range(len(filtro1_normalizada[0]))] for i in range(len(filtro1_normalizada))]
+    puntos_de_interes_2 = [[detectar_puntos_de_interes(filtro2_normalizada[i][ii], umbral_deteccion) for ii in range(len(filtro2_normalizada[0]))] for i in range(len(filtro2_normalizada))]
 
-    repeatability, images, rotated_images = zip(*[Fitness(img1.copy(), img2.copy(), puntos_de_interes_1[i], puntos_de_interes_2[i], low_keypoints_number, up_keypoints_number, transformation, transformation_value).process() for i in range(len(filter_MP))])
+    repeatability, images, rotated_images = zip(*[zip(*[Fitness(img1[ii].copy(), img2[ii].copy(), puntos_de_interes_1[i][ii], puntos_de_interes_2[i][ii], low_keypoints_number, up_keypoints_number, transformation, transformation_value).process() for ii in range(len(img1))]) for i in range(len(filter_MP))])
     
-    return repeatability, filter_MP, images, rotated_images
+    repeatability = np.array(repeatability)
+    
+    return repeatability.mean(axis=1), filter_MP, images, rotated_images
