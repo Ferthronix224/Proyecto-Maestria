@@ -2,6 +2,7 @@
 import cv2 
 import time
 import warnings
+import numpy as np
 # Scripts
 from DE import Genotype
 import Transformations as tr
@@ -11,7 +12,7 @@ warnings.filterwarnings('ignore', category=RuntimeWarning)
 
 
 # Main process for interest point detection
-def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value, no):
+def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim, up_lim, mutation_rate, crossover_rate, generations, termination_criteria, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
     # Start timer
     start = time.time()
     # Condition in case the image was not found
@@ -28,9 +29,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
     for generation in range(generations):
         repeatability_population, filter_M, images, transformed_images = pr.repeatability(population, img1.copy(), img2.copy(), umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         best_current_fitness = max(repeatability_population)
-        best_current_genotype = filter_M[repeatability_population.index(best_current_fitness)]
-        best_current_image = images[repeatability_population.index(best_current_fitness)]
-        best_current_transformed_image = transformed_images[repeatability_population.index(best_current_fitness)]
+        best_current_genotype = filter_M[np.argmax(repeatability_population)]
+        best_current_image = images[np.argmax(repeatability_population)]
+        best_current_transformed_image = transformed_images[np.argmax(repeatability_population)]
 
         if generation == 0:
             best_fitness = best_current_fitness
@@ -56,8 +57,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Best Fitness: {best_fitness:.2f}%')
             end = time.time()
             print(f'Time: {end - start:.2f} segundos')
-            cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
-            cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
+            for i in range(len(images[1])):
+                cv2.imwrite(f'img/results/original-{i+1}.jpg', best_image[i])
+                cv2.imwrite(f'img/results/transformed-{i+1}.jpg', best_rotated_image[i])
             break
         # Console output when all generations have finished        
         elif generation == GENERATIONS - 1:
@@ -66,8 +68,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Best Fitness: {best_fitness:.2f}%')
             end = time.time()
             print(f'Time: {end - start:.2f} segundos')
-            cv2.imwrite(f'img/results/Original_{no}.jpg', best_image)
-            cv2.imwrite(f'img/results/Transformed_{no}.jpg', best_rotated_image)
+            for i in range(len(images[1])):
+                cv2.imwrite(f'img/results/original-{i+1}.jpg', best_image[i])
+                cv2.imwrite(f'img/results/transformed-{i+1}.jpg', best_rotated_image[i])
 
 if __name__ == '__main__':
     # Parameters
