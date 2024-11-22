@@ -74,16 +74,16 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
 
 if __name__ == '__main__':
     # Parameters
-    IMG1 = [cv2.imread(f'img/originals/{i}.jpg', cv2.IMREAD_GRAYSCALE)for i in range(1, 11)]
-    IMG2 = [cv2.imread(f'img/rotation/{i}.jpg', cv2.IMREAD_GRAYSCALE) for i in range(1, 11)]
+    IMG1 = [cv2.imread(f'img/originals/{i}.jpg', cv2.IMREAD_GRAYSCALE)for i in range(1, 293)]
+    IMG2 = [cv2.imread(f'img/rotated/{i}.jpg', cv2.IMREAD_GRAYSCALE) for i in range(1, 293)]
     UMBRAL = 0.95
-    POPULATION_SIZE = 20
+    POPULATION_SIZE = 100
     GENOTYPE_LENGTH = 50
     LOW_LIM_GEN = 1
     UP_LIM_GEN = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 100
+    GENERATIONS = 1
     TERMINATION_CRITERIA = 95.0
     WR = 3
     LOW_LIM_KN = 100  # KN -> Keypoints Number
