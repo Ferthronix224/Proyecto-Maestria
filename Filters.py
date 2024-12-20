@@ -1,66 +1,32 @@
-import numpy as np
-import cv2
+import cupy as cp
+from skimage import filters
 
 # Laplaciano-Gaussiano 1
-def LapG1(img):
-    img = np.where(img == 0, 1e-4, img)
-    return Lap(Gau1(img.copy()))
+class Filters:
+    def LapG1(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return self.Lap(self.Gau1(img))
 
-# Laplaciano-Gaussiano 2
-def LapG2(img):
-    img = np.where(img == 0, 1e-4, img)
-    return Lap(Gau2(img.copy()))
+    def LapG2(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return self.Lap(self.Gau2(img))
 
-# Laplaciano
-def Lap(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-    img = np.where(img == 0, 1e-4, img)
-    return cv2.Laplacian(img, cv2.CV_64F, ksize=5)
+    def Lap(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return filters.laplace(img, 3)
 
-# Gaussiano 1
-def Gau1(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-    img = np.where(img == 0, 1e-4, img)
-    # Aplicar el filtro de la Gaussiana
-    # print('Gau1')
-    value = cv2.GaussianBlur(img, (5, 5), sigmaX=1, sigmaY=1)
-    # print(value)
-    return value
+    def Gau1(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return filters.gaussian(img, 1)
 
-# Gaussiano 2
-def Gau2(img):
-    if img.dtype != np.float32 and img.dtype != np.float64:
-        img = img.astype(np.float32)
-    img = np.where(img == 0, 1e-4, img)
-    # Aplicar el filtro de la Gaussiana
-    return cv2.GaussianBlur(img, (5, 5), sigmaX=2, sigmaY=2)
+    def Gau2(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return filters.gaussian(img, 2)
 
-# Raíz Cuadrada
-def Sqrt(img):
-    img = np.where(img == 0, 1e-4, img)
-    result = []
-    for sublist in img:
-        result_sublist = []
-        for x in sublist:
-            if x < 0:
-                result_sublist.append(x)
-            else:
-                result_sublist.append(np.sqrt(x))
-        result.append(result_sublist)
-    return np.array(result)
+    def Sqrt(self, img):
+        img = cp.where(img == 0, 1e-4, img)
+        return cp.sqrt(img)
 
-# Logaritmo
-def Log(img):
-    img = np.where(img == 0, 1e-4, img)
-    result = []
-    for sublist in img:
-        result_sublist = []
-        for x in sublist:
-            if x <= 0:
-                result_sublist.append(x)
-            else:
-                result_sublist.append(np.log10(x))
-        result.append(result_sublist)
-    return np.array(result)
+    def Log(self, img):
+            img = cp.where(img == 0, 1e-4, img)
+            return cp.log10(img)
