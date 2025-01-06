@@ -31,6 +31,7 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         repeatability_population, filter_M = pr.repeatability(population, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         best_current_fitness = max(repeatability_population)
         best_current_genotype = filter_M[int(repeatability_population.index(best_current_fitness))]
+        changes = False
 
         if generation == 0:
             best_fitness = best_current_fitness
@@ -39,13 +40,21 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             if best_current_fitness > best_fitness:
                 best_fitness = best_current_fitness
                 best_genotype = best_current_genotype
+                changes = True
 
         mutation = genotype.Mutation(population)
         crossover = genotype.Crossover(population, mutation)
         repeatability_crossover, _ = pr.repeatability(crossover, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         genotype.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
-        if generation % 10 == 0:
+        if generation == 0:
+            print(f'Generation {generation + 1}')
+            print(f'Best Solution: {best_genotype}')
+            print(f'Best Fitness: {best_fitness:.2f}%')
+            end = time.time()
+            print(f'Time: {end - start:.2f} segundos')
+
+        if changes:
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
             print(f'Best Fitness: {best_fitness:.2f}%')
@@ -72,48 +81,48 @@ transformations = [tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.trans
 transformations_values = [30, 60, 90, 10, 20, 30, 50, 70, 90]
 
 
-#region uno
-# index = 3
+#region one
+index = 2
 
-# IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 293)]
-# IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
+IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 101)]
+IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 101)]
 
-# UMBRAL = 0.90
-# POPULATION_SIZE = 20
-# GENOTYPE_LENGTH = 50
-# LOW_LIM_GEN = 1
-# UP_LIM_GEN = 255
-# F = 0.5  # Xm = Xi + f (x2 - x3)
-# CROSSOVER_RATE = 0.7
-# GENERATIONS = 500
-# WR = 3
-# LOW_LIM_KN = 10  # KN -> Keypoints Number
-# UP_LIM_KN = 5000
-# TRANSFORMATION = transformations[index]
-# TRANSFORMATION_VALUE = transformations_values[index]
+UMBRAL = 0.90
+POPULATION_SIZE = 20
+GENOTYPE_LENGTH = 50
+LOW_LIM_GEN = 1
+UP_LIM_GEN = 255
+F = 0.5  # Xm = Xi + f (x2 - x3)
+CROSSOVER_RATE = 0.7
+GENERATIONS = 100
+WR = 3
+LOW_LIM_KN = 10  # KN -> Keypoints Number
+UP_LIM_KN = 10000
+TRANSFORMATION = transformations[index]
+TRANSFORMATION_VALUE = transformations_values[index]
 
-# main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
-#endregion uno
+main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
+#endregion one
 
-#region muchos
-for index in range(6):
-    print(rutes[index])
-    IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 293)]
-    IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
+#region many
+# for index in range(6):
+#     print(rutes[index])
+#     IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 293)]
+#     IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
 
-    UMBRAL = 0.90
-    POPULATION_SIZE = 20
-    GENOTYPE_LENGTH = 50
-    LOW_LIM_GEN = 1
-    UP_LIM_GEN = 255
-    F = 0.5  # Xm = Xi + f (x2 - x3)
-    CROSSOVER_RATE = 0.7
-    GENERATIONS = 500
-    WR = 3
-    LOW_LIM_KN = 10  # KN -> Keypoints Number
-    UP_LIM_KN = 5000
-    TRANSFORMATION = transformations[index]
-    TRANSFORMATION_VALUE = transformations_values[index]
+#     UMBRAL = 0.90
+#     POPULATION_SIZE = 20
+#     GENOTYPE_LENGTH = 50
+#     LOW_LIM_GEN = 1
+#     UP_LIM_GEN = 255
+#     F = 0.5  # Xm = Xi + f (x2 - x3)
+#     CROSSOVER_RATE = 0.7
+#     GENERATIONS = 500
+#     WR = 3
+#     LOW_LIM_KN = 10  # KN -> Keypoints Number
+#     UP_LIM_KN = 5000
+#     TRANSFORMATION = transformations[index]
+#     TRANSFORMATION_VALUE = transformations_values[index]
 
-    main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
-#endregion muchos
+#     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
+#endregion many
