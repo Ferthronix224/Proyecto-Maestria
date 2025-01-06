@@ -1,8 +1,8 @@
 import cupy as cp
+import gc
+from Filters import Filters
 from MP import MP
 from Fitness import Fitness
-import Filters
-import gc
 
 class Process:
   def detectar_puntos_de_interes(self, magnitud, umbral):
@@ -36,10 +36,12 @@ class Process:
   def repeatability(self, population, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
       # Proceso de mapeo
       filter_MP = [MP().generate(population[i], wr) for i in range(len(population))]
+      img_len = len(img1)
 
       # Evaluacion de los filtros
       filtro1 = self.apply_filters(img1, filter_MP).astype(cp.uint8)
       filtro2 = self.apply_filters(img2, filter_MP).astype(cp.uint8)
+      del img1, img2
       cp._default_memory_pool.free_all_blocks()
       gc.collect()
 
@@ -61,9 +63,8 @@ class Process:
       gc.collect()
 
       # Repeatability
-      repeatability = [[Fitness(puntos_de_interes_1[i][ii], puntos_de_interes_2[i][ii], low_keypoints_number, up_keypoints_number, transformation, transformation_value).process() for ii in range(len(img1))] for i in range(len(filter_MP))]
-      del puntos_de_interes_1
-      del puntos_de_interes_2
+      repeatability = [[Fitness(puntos_de_interes_1[i][ii], puntos_de_interes_2[i][ii], low_keypoints_number, up_keypoints_number, transformation, transformation_value).process() for ii in range(img_len)] for i in range(len(filter_MP))]
+      del puntos_de_interes_1, puntos_de_interes_2
       cp._default_memory_pool.free_all_blocks()
       gc.collect()
 

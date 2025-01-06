@@ -1,7 +1,6 @@
 import cupy as cp
-from skimage import filters
+from cucim.skimage import filters
 
-# Laplaciano-Gaussiano 1
 class Filters:
     def LapG1(self, img):
         img = cp.where(img == 0, 1e-4, img)

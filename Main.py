@@ -1,14 +1,11 @@
-# Libraries
+import cupy as cp
 from skimage import io
 import time
 import warnings
-import cupy as cp
-# Scripts
-from DE import Genotype
-from Filters import Filters
-
 from Transformations import Transformations
+from Filters import Filters
 from Process import Process
+from Genotype import Genotype
 
 warnings.filterwarnings('ignore', category=RuntimeWarning)
 tr = Transformations()
@@ -48,14 +45,6 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
         repeatability_crossover, _ = pr.repeatability(crossover, img1, img2, umbral_deteccion, wr, low_keypoints_number, up_keypoints_number, transformation, transformation_value)
         genotype.Selection(population, crossover, repeatability_population, repeatability_crossover)
 
-        # Stopping criterion when the best solution has been found
-        if generation == 0:
-            print(f'Generation {generation + 1}')
-            print(f'Best Solution: {best_genotype}')
-            print(f'Best Fitness: {best_fitness:.2f}%')
-            end = time.time()
-            print(f'Time: {end - start:.2f} segundos')
-
         if generation % 10 == 0:
             print(f'Generation {generation + 1}')
             print(f'Best Solution: {best_genotype}')
@@ -78,23 +67,48 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             end = time.time()
             print(f'Time: {end - start:.2f} segundos')
 
-rutes = ['rotated/30', 'rotated/60', 'rotated/90', 'scale/50', 'scale/70', 'scale/90', 'translated/10', 'translated/20', 'translated/30']
-transformations = [tr.rotation, tr.rotation, tr.rotation, tr.scale, tr.scale, tr.scale, tr.translate, tr.translate, tr.translate]
-transformations_values = [30, 60, 90, 50, 70, 90, 10, 20, 30]
+rutes = ['rotated/30', 'rotated/60', 'rotated/90', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/90']
+transformations = [tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
+transformations_values = [30, 60, 90, 10, 20, 30, 50, 70, 90]
 
-for index in range(9):
-    # Parameters
-    IMG1 = [cp.asarray(io.imread(f'drive/MyDrive/img/originals/{i}.jpg', True)) for i in range(1, 293)]
-    IMG2 = [cp.asarray(io.imread(f'drive/MyDrive/img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
+
+#region uno
+# index = 3
+
+# IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 293)]
+# IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
+
+# UMBRAL = 0.90
+# POPULATION_SIZE = 20
+# GENOTYPE_LENGTH = 50
+# LOW_LIM_GEN = 1
+# UP_LIM_GEN = 255
+# F = 0.5  # Xm = Xi + f (x2 - x3)
+# CROSSOVER_RATE = 0.7
+# GENERATIONS = 500
+# WR = 3
+# LOW_LIM_KN = 10  # KN -> Keypoints Number
+# UP_LIM_KN = 5000
+# TRANSFORMATION = transformations[index]
+# TRANSFORMATION_VALUE = transformations_values[index]
+
+# main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
+#endregion uno
+
+#region muchos
+for index in range(6):
+    print(rutes[index])
+    IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in range(1, 293)]
+    IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in range(1, 293)]
 
     UMBRAL = 0.90
-    POPULATION_SIZE = 30
+    POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
     LOW_LIM_GEN = 1
     UP_LIM_GEN = 255
     F = 0.5  # Xm = Xi + f (x2 - x3)
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 100
+    GENERATIONS = 500
     WR = 3
     LOW_LIM_KN = 10  # KN -> Keypoints Number
     UP_LIM_KN = 5000
@@ -102,3 +116,4 @@ for index in range(9):
     TRANSFORMATION_VALUE = transformations_values[index]
 
     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_KN, UP_LIM_KN, TRANSFORMATION, TRANSFORMATION_VALUE)
+#endregion muchos

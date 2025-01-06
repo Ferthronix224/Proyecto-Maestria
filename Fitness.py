@@ -1,9 +1,5 @@
-# Tasa de repetibilidad
 import cupy as cp
 
-np.set_printoptions(threshold=np.inf)
-
-# Función que retorna la imagen con las coincidencias y la tasa de repetibilidad
 class Fitness:
     def __init__(self, keypoints, transformed_keypoints, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
         self.keypoints = keypoints
@@ -19,13 +15,18 @@ class Fitness:
 
         original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
         distances = cp.linalg.norm(original_transformed_keypoints[:, cp.newaxis] - self.transformed_keypoints, axis=2)
+        del original_transformed_keypoints
         matches = distances <= 3
+        del distances
         good_matches = cp.sum(cp.any(matches, axis=1))
+        del matches
 
         # Calcular tasa de repetibilidad
         if good_matches == 0:
             repeatability = 0
         else:
             repeatability = (good_matches / max(len(self.keypoints), len(self.transformed_keypoints))) * 100
+            
+        del good_matches
 
         return repeatability

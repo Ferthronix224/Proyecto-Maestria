@@ -1,6 +1,7 @@
 import cupy as cp
 
 class Transformations:
+  
   def translate(self, coor, pixel):
     return coor + pixel
 
@@ -19,23 +20,25 @@ class Transformations:
       # Matriz de rotación
       R = cp.array([[cp.cos(angulo_radianes), -cp.sin(angulo_radianes)],
                     [cp.sin(angulo_radianes), cp.cos(angulo_radianes)]])
+      
+      del angulo_radianes
 
-      # Desplazamiento del centro (puedes parametrizarlo si lo necesitas)
       centro = cp.array([128, 128])
 
-      # Convertir coordenadas a cupy array si no lo son
-      coordenadas = cp.array(coordenadas)
-
       # Trasladar todos los puntos al origen
-      coordenadas_trasladadas = coordenadas - centro
+      coordenadas -= centro
 
       # Aplicar la rotación vectorizada
-      coordenadas_rotadas = coordenadas_trasladadas @ R.T
+      coordenadas @= R.T
+      
+      del R
 
       # Trasladar los puntos de vuelta
-      nuevas_coordenadas = coordenadas_rotadas + centro
+      coordenadas += centro
 
-      return nuevas_coordenadas
+      del centro
+
+      return coordenadas
 
   def scale(self, coordenadas, escala):
       """
@@ -45,18 +48,16 @@ class Transformations:
       escala: Factores de escala
       """
       coordenadas = coordenadas.astype(float)
-      # Crear una copia de la matriz para no modificar la original
-      matriz_escalada = cp.copy(coordenadas)
-
+      centro = cp.array([128, 128])
       # Restar el centro de escala
-      matriz_escalada[:, 0] -= 128
-      matriz_escalada[:, 1] -= 128
+      coordenadas -= centro
 
       # Aplicar el factor de escala a las coordenadas x e y
-      matriz_escalada[:, :] *= escala / 100
+      coordenadas *= escala / 100
 
       # Volver a trasladar al sistema original sumando el centro de escala
-      matriz_escalada[:, 0] += 128
-      matriz_escalada[:, 1] += 128
+      coordenadas += centro
 
-      return cp.array(matriz_escalada.astype(int))
+      del centro
+
+      return cp.array(coordenadas.astype(int))
