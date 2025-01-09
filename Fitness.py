@@ -1,31 +1,49 @@
 import cupy as cp
 
 class Fitness:
-    def __init__(self, keypoints, transformed_keypoints, low_keypoints_number, up_keypoints_number, transformation, transformation_value):
-        self.keypoints = keypoints
-        self.transformed_keypoints = transformed_keypoints
-        self.low_keypoints_number = low_keypoints_number
-        self.up_keypoints_number = up_keypoints_number
+    '''
+    Class to measure phenotypes' performance.
+
+    Parameters
+    ----------
+    interest_points (array): Array of interest points coordinates from the original image.
+    transformed_interest_points (array): Array of interest points coordinates from the transformed image.
+    low_interest_points_number (int): Low number range of interest points.
+    up_interest_points_number (int): Up number range of interest points.
+    transformation (function): Function to transform interest points into transformed interest points.
+    transformation_value (int): Transformation value to use in the transformation function.
+    '''
+    # Constructor.
+    def __init__(self, interest_points, transformed_interest_points, low_interest_points_number, up_interest_points_number, transformation, transformation_value):
+        self.interest_points = interest_points
+        self.transformed_interest_points = transformed_interest_points
+        self.low_interest_points_number = low_interest_points_number
+        self.up_interest_points_number = up_interest_points_number
         self.transformation = transformation
         self.transformation_value = transformation_value
 
     def process(self):
-        if any([len(self.transformed_keypoints) > self.up_keypoints_number, len(self.keypoints) > self.up_keypoints_number, len(self.transformed_keypoints) < self.low_keypoints_number, len(self.keypoints) < self.low_keypoints_number, len(self.keypoints) == 0, len(self.transformed_keypoints) == 0]):
+        # Condition to prevent some variables from not being in the established range.
+        if any([len(self.transformed_interest_points) > self.up_interest_points_number, len(self.interest_points) > self.up_interest_points_number, len(self.transformed_interest_points) < self.low_interest_points_number, len(self.interest_points) < self.low_interest_points_number, len(self.interest_points) == 0, len(self.transformed_interest_points) == 0]):
             return 0
 
-        original_transformed_keypoints = self.transformation(self.keypoints, self.transformation_value)
-        distances = cp.linalg.norm(original_transformed_keypoints[:, cp.newaxis] - self.transformed_keypoints, axis=2)
-        del original_transformed_keypoints
+        # Interest points' matching.
+        original_transformed_interest_points = self.transformation(self.interest_points, self.transformation_value)
+        # Distance calculation.
+        distances = cp.linalg.norm(original_transformed_interest_points[:, cp.newaxis] - self.transformed_interest_points, axis=2)
+        del original_transformed_interest_points
+        # Mask
         matches = distances <= 3
         del distances
+        # Good matches calculation.
         good_matches = cp.sum(cp.any(matches, axis=1))
         del matches
 
-        # Calcular tasa de repetibilidad
+        # Calculate repeatability rate.
         if good_matches == 0:
             repeatability = 0
         else:
-            repeatability = (good_matches / max(len(self.keypoints), len(self.transformed_keypoints))) * 100
+            repeatability = (good_matches / max(len(self.interest_points), len(self.transformed_interest_points))) * 100
             
         del good_matches
 

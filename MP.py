@@ -4,8 +4,10 @@ class MP:
     """
     Class MP (Mapping Process) converts genotypes into phenotypes by replacing non-terminal symbols with terminal symbols.
     """
+
+    # Constructor.
     def __init__(self):
-        # Definición de las reglas de producción
+        # Production rules.
         self.productions = {
             '<Start>': ['<Expr>'],
             '<Expr>': ['<Expr><Op><Expr>', '<Filter>(<Expr>)', '<Terminal>'],
@@ -17,7 +19,7 @@ class MP:
             '<Terminal>': ['img']
         }
 
-    # Función para expandir un símbolo no terminal usando el genotipo
+    # Function to expand a non-terminal symbol using the genotype.
     def expand_symbol(self, symbol, genotype, gen_index):
         if symbol in self.productions:
             choices = self.productions[symbol]
@@ -26,24 +28,24 @@ class MP:
         return symbol, gen_index
 
 
-    # Función principal para generar una cadena desde el símbolo de inicio
+    # Main function to generate a string from the start symbol.
     def generate(self, genotype, wr):
         current_string = "<Start>"
         gen_index = 0
         if wr > 1:
             genotype * wr
 
-        # Expansión iterativa
+        # Iterative expansion.
         while True:
-            # Buscar todos los no terminales en la cadena actual
+            # Search for all non-terminals in the current string.
             non_terminals = re.findall(r'<[^>]+>', current_string)
             if gen_index == (len(genotype) - 1):
                 return 'Worst'
             if not non_terminals:
                 return current_string
 
-            # Reemplazar el primer no terminal encontrado
+            # Replace the first non-terminal found.
             for non_terminal in non_terminals:
                 expansion, gen_index = self.expand_symbol(non_terminal, genotype, gen_index)
                 current_string = current_string.replace(non_terminal, expansion, 1)
-                break  # Salir del bucle para reiniciar la búsqueda de no terminales
+                break
