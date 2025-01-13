@@ -95,14 +95,14 @@ transformations_values = [30, 60, 90, 10, 20, 30, 50, 70, 90]
 
 # Section to run only one configuration.
 # region one
-index = 2
-mrange = range(1, 101)
+index = -1
+mrange = range(1, 201)
 
-for _ in range(2):
+for _ in range(4):
     IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
     IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
 
-    UMBRAL = 0.90
+    UMBRAL = 0.95
     POPULATION_SIZE = 20
     GENOTYPE_LENGTH = 50
     LOW_LIM_GEN = 1
@@ -112,7 +112,7 @@ for _ in range(2):
     GENERATIONS = 100
     WR = 3
     LOW_LIM_IPN = 10  # IPN -> Interest Points Number.
-    UP_LIM_IPN = 10000
+    UP_LIM_IPN = 7000
     TRANSFORMATION = transformations[index]
     TRANSFORMATION_VALUE = transformations_values[index]
 
@@ -121,26 +121,27 @@ for _ in range(2):
 
 # Section to run many configurations.
 # region many
-# mrange = range(1, 101)
+# mrange = range(1, 201)
 
-# for index in range(6):
+# for index in range(6, 7):
 #     print(rutes[index])
-#     IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
-#     IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
+#     for _ in range(4):
+#         IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
+#         IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
 
-#     UMBRAL = 0.90
-#     POPULATION_SIZE = 20
-#     GENOTYPE_LENGTH = 50
-#     LOW_LIM_GEN = 1
-#     UP_LIM_GEN = 255
-#     F = 0.5  # Xm = Xi + f (x2 - x3)
-#     CROSSOVER_RATE = 0.7
-#     GENERATIONS = 500
-#     WR = 3
-#     LOW_LIM_IPN = 10  # IPN -> Interest Points Number
-#     UP_LIM_IPN = 5000
-#     TRANSFORMATION = transformations[index]
-#     TRANSFORMATION_VALUE = transformations_values[index]
+#         UMBRAL = 0.90
+#         POPULATION_SIZE = 20
+#         GENOTYPE_LENGTH = 50
+#         LOW_LIM_GEN = 1
+#         UP_LIM_GEN = 255
+#         F = 0.5  # Xm = Xi + f (x2 - x3)
+#         CROSSOVER_RATE = 0.7
+#         GENERATIONS = 10
+#         WR = 3
+#         LOW_LIM_IPN = 10  # IPN -> Interest Points Number
+#         UP_LIM_IPN = 5000
+#         TRANSFORMATION = transformations[index]
+#         TRANSFORMATION_VALUE = transformations_values[index]
 
-#     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_IPN, UP_LIM_IPN, TRANSFORMATION, TRANSFORMATION_VALUE)
+#         main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_IPN, UP_LIM_IPN, TRANSFORMATION, TRANSFORMATION_VALUE)
 # endregion many

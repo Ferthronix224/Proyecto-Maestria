@@ -12,9 +12,9 @@ class MP:
             '<Start>': ['<Expr>'],
             '<Expr>': ['<Expr><Op><Expr>', '<Filter>(<Expr>)', '<Terminal>'],
             '<Filter>': ['<Gau>', '<Arith>', '<Lap>'],
-            '<Gau>': ['ft.Gau1', 'ft.Gau2'],
+            '<Gau>': ['ft.Gau1', 'ft.Gau2', 'ft.GauDX', 'ft.GauDY'],
             '<Lap>': ['ft.LapG1', 'ft.LapG2', 'ft.Lap'],
-            '<Arith>': ['ft.Sqrt', 'ft.Log'],
+            '<Arith>': ['ft.Sqrt', 'ft.Sqr','ft.Log', 'ft.M05', 'ft.Abs', 'ft.Average', 'ft.Median', 'ft.HEq'],
             '<Op>': ['+', '-', '*', '/'],
             '<Terminal>': ['img']
         }
