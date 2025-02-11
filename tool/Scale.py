@@ -1,4 +1,4 @@
-from skimage import io, transform
+from skimage import io, transform, img_as_ubyte
 import numpy as np
 
 def scale(image, scale_value):
@@ -36,12 +36,7 @@ def scale(image, scale_value):
     output_image[y_offset:y_offset+new_height, x_offset:x_offset+new_width] = resized_image
 
     return output_image
-
-# Cargar la imagen
-image = io.imread('../img/originals/1.jpg')
-
-# Escalar al 50% y centrar en un lienzo negro
-scaled_image = scale(image, 50)
-
-# Guardar la imagen escalada
-io.imsave('../img/scale/50/{i}.jpg', scaled_image)
+for i in range(1, 293):
+    image = io.imread(f'img/originals/{i}.jpg')
+    scaled_image = scale(image, 90)
+    io.imsave(f'img/scale/90/{i}.jpg', img_as_ubyte(scaled_image))
