@@ -90,15 +90,15 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
 
 # Available configurations.
 rutes = ['rotated/30', 'rotated/60', 'rotated/90', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/90']
-transformations = [tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
-transformations_values = [30, 60, 90, 10, 20, 30, 50, 70, 90]
+transformations = [tr.rotation, tr.rotation, tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
+transformations_values = [30, 60, 90, 180, 270, 10, 20, 30, 50, 70, 90]
 
-# Section to run only one configuration.
-# region one
-index = -1
-mrange = range(1, 201)
 
-for _ in range(4):
+mrange = range(1, 293)
+# index = -1
+# for _ in range(1):
+for index in range(len(rutes)):
+    print(rutes[index])
     IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
     IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
 
@@ -117,31 +117,3 @@ for _ in range(4):
     TRANSFORMATION_VALUE = transformations_values[index]
 
     main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_IPN, UP_LIM_IPN, TRANSFORMATION, TRANSFORMATION_VALUE)
-# endregion one
-
-# Section to run many configurations.
-# region many
-# mrange = range(1, 201)
-
-# for index in range(6, 7):
-#     print(rutes[index])
-#     for _ in range(4):
-#         IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
-#         IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
-
-#         UMBRAL = 0.90
-#         POPULATION_SIZE = 20
-#         GENOTYPE_LENGTH = 50
-#         LOW_LIM_GEN = 1
-#         UP_LIM_GEN = 255
-#         F = 0.5  # Xm = Xi + f (x2 - x3)
-#         CROSSOVER_RATE = 0.7
-#         GENERATIONS = 10
-#         WR = 3
-#         LOW_LIM_IPN = 10  # IPN -> Interest Points Number
-#         UP_LIM_IPN = 5000
-#         TRANSFORMATION = transformations[index]
-#         TRANSFORMATION_VALUE = transformations_values[index]
-
-#         main(IMG1, IMG2, UMBRAL, POPULATION_SIZE, GENOTYPE_LENGTH, LOW_LIM_GEN, UP_LIM_GEN, F, CROSSOVER_RATE, GENERATIONS, WR, LOW_LIM_IPN, UP_LIM_IPN, TRANSFORMATION, TRANSFORMATION_VALUE)
-# endregion many

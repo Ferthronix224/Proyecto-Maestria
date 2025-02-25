@@ -33,7 +33,7 @@ class Fitness:
         distances = cp.linalg.norm(original_transformed_interest_points[:, cp.newaxis] - self.transformed_interest_points, axis=2)
         del original_transformed_interest_points
         # Mask
-        matches = distances <= 3
+        matches = distances <= 1.5
         del distances
         # Good matches calculation.
         good_matches = cp.sum(cp.any(matches, axis=1))
