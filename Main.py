@@ -89,9 +89,9 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Time: {end - start:.2f} segundos')
 
 # Available configurations.
-rutes = ['rotated/30', 'rotated/60', 'rotated/90', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/90']
-transformations = [tr.rotation, tr.rotation, tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
-transformations_values = [30, 60, 90, 180, 270, 10, 20, 30, 50, 70, 90]
+rutes = ['rotated/90', 'rotated/180', 'rotated/270', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/90']
+transformations = [tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
+transformations_values = [90, 180, 270, 10, 20, 30, 50, 70, 90]
 
 
 mrange = range(1, 293)

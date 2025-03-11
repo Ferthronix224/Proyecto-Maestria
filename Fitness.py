@@ -29,11 +29,14 @@ class Fitness:
 
         # Interest points' matching.
         original_transformed_interest_points = self.transformation(self.interest_points, self.transformation_value)
+        # original_transformed_interest_points = [coord for coord in original_transformed_interest_points if all(valor <= 255 for valor in coord)]
+        # if len(original_transformed_interest_points) == 0:
+        #     return 0
         # Distance calculation.
         distances = cp.linalg.norm(original_transformed_interest_points[:, cp.newaxis] - self.transformed_interest_points, axis=2)
         del original_transformed_interest_points
         # Mask
-        matches = distances <= 1.5
+        matches = distances <= 3
         del distances
         # Good matches calculation.
         good_matches = cp.sum(cp.any(matches, axis=1))
