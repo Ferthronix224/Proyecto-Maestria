@@ -1,4 +1,4 @@
-import cupy as cp
+import numpy as cp
 
 class Transformations:
   
@@ -35,7 +35,7 @@ class Transformations:
       center = cp.array([128, 128])
 
       coor -= center
-
+      coor = coor.astype(cp.float64)
       # Apply rotation.
       coor @= R.T      
       del R

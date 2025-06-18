@@ -1,5 +1,5 @@
 # Libraries
-import cupy as cp
+import numpy as cp
 import gc
 # Scripts
 from Filters import Filters
@@ -38,9 +38,9 @@ class Process:
         results = []
         for filter_str in filters:
             # Evaluar cada filtro para todas las imágenes.
-            filtered_imgs = cp.asarray([self.evaluation(img, filter_str) for img in images])
+            filtered_imgs = cp.array([self.evaluation(img, filter_str) for img in images])
             results.append(filtered_imgs)
-        return cp.asarray(results)
+        return cp.array(results)
 
     # Function to return repeatability population and its corresponding filters.
     def repeatability(self, population, img1, img2, umbral_deteccion, wr, low_interest_points_number, up_interest_points_number, transformation, transformation_value):
@@ -52,29 +52,21 @@ class Process:
         filter_1 = self.apply_filters(img1, filter_MP).astype(cp.uint8)
         filter_2 = self.apply_filters(img2, filter_MP).astype(cp.uint8)
         del img1, img2
-        cp._default_memory_pool.free_all_blocks()
-        gc.collect()
 
         # Normalization.
         normalized_filter_1 = [[self.normalization(filter_1[i][ii]) for ii in range(len(filter_1[0]))] for i in range(len(filter_1))]
         del filter_1
         normalized_filter_2 = [[self.normalization(filter_2[i][ii]) for ii in range(len(filter_2[0]))] for i in range(len(filter_2))]
         del filter_2
-        cp._default_memory_pool.free_all_blocks()
-        gc.collect()
 
         # Interest Points.
         interest_point_1 = [[self.interest_points_detection(normalized_filter_1[i][ii], umbral_deteccion) for ii in range(len(normalized_filter_1[0]))] for i in range(len(normalized_filter_1))]
         del normalized_filter_1
         interest_point_2 = [[self.interest_points_detection(normalized_filter_2[i][ii], umbral_deteccion) for ii in range(len(normalized_filter_2[0]))] for i in range(len(normalized_filter_2))]
         del normalized_filter_2
-        cp._default_memory_pool.free_all_blocks()
-        gc.collect()
 
         # Repeatability.
         repeatability = [[Fitness(interest_point_1[i][ii], interest_point_2[i][ii], low_interest_points_number, up_interest_points_number, transformation, transformation_value).process() for ii in range(img_len)] for i in range(len(filter_MP))]
         del interest_point_1, interest_point_2
-        cp._default_memory_pool.free_all_blocks()
-        gc.collect()
 
         return [sum(row) / len(row) for row in repeatability], filter_MP

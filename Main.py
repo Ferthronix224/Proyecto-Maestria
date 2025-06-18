@@ -1,5 +1,5 @@
 # Libraries.
-import cupy as cp
+import numpy as np
 from skimage import io
 import time
 import warnings
@@ -89,18 +89,17 @@ def main(img1, img2, umbral_deteccion, population_size, genotype_length, low_lim
             print(f'Time: {end - start:.2f} segundos')
 
 # Available configurations.
-rutes = ['rotated/90', 'rotated/180', 'rotated/270', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/90']
+rutes = ['rotated/90', 'rotated/180', 'rotated/270', 'translated/10', 'translated/20', 'translated/30', 'scale/50', 'scale/70', 'scale/80']
 transformations = [tr.rotation, tr.rotation, tr.rotation, tr.translate, tr.translate, tr.translate, tr.scale, tr.scale, tr.scale]
-transformations_values = [90, 180, 270, 10, 20, 30, 50, 70, 90]
+transformations_values = [90, 180, 270, 10, 20, 30, 50, 70, 80]
 
 
-mrange = range(1, 293)
-# index = -1
-# for _ in range(1):
-for index in range(len(rutes)):
+index = 0
+for _ in range(1):
+# for index in range(len(rutes)):
     print(rutes[index])
-    IMG1 = [cp.asarray(io.imread(f'img/originals/{i}.jpg', True)) for i in mrange]
-    IMG2 = [cp.asarray(io.imread(f'img/{rutes[index]}/{i}.jpg', True)) for i in mrange]
+    IMG1 = [np.array(io.imread(f'img/figures.png', True))]
+    IMG2 = [np.array(io.imread(f'img/figures_rotated.png', True))]
 
     UMBRAL = 0.95
     POPULATION_SIZE = 20
@@ -109,7 +108,7 @@ for index in range(len(rutes)):
     UP_LIM_GEN = 255
     F = 0.5  # Xm = Xi + f (x2 - x3).
     CROSSOVER_RATE = 0.7
-    GENERATIONS = 100
+    GENERATIONS = 1000
     WR = 3
     LOW_LIM_IPN = 10  # IPN -> Interest Points Number.
     UP_LIM_IPN = 7000

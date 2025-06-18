@@ -1,6 +1,8 @@
+filtros = ['ft.LapG2(img+img)+img+img', 'ft.Log(ft.LapG1(ft.Lap(img))+img/img)', 'ft.GauDY(img+ft.LapG1(img)-ft.Sqr(img)*img-ft.Abs(img))', 'ft.GauDX(img)', 'ft.GauDY(img)-img', 'img/ft.GauDY(ft.Log(img))+ft.Lap(ft.Log(img))', 'ft.LapG2(img-img-img)', 'ft.Log(img*ft.Median(img)+img)', 'ft.GauDX(ft.HEq(img*img))*img-ft.Abs(img)+img', 'ft.HEq(img)', 'img/ft.LapG1(img)', 'img-ft.Gau2(ft.Gau1(ft.Sqr(ft.LapG1(img))))', 'ft.GauDY(ft.Lap(img))-ft.Lap(ft.Lap(img))', 'ft.GauDX(ft.Log(img))*img', 'ft.Lap(ft.LapG1(img)+ft.Gau2(img-ft.LapG2(ft.LapG2(img))+img))', 'img/img', 'ft.Lap(img)', 'ft.LapG1(img)', 'ft.GauDX(ft.Gau1(img))', 'img-ft.HEq(img)', 'ft.Lap(ft.Log(ft.LapG2(img*img)))+img+img+ft.Abs(img)', 'ft.LapG2(img)', 'ft.Gau1(img)', 'ft.LapG1(img)', 'ft.Gau2(ft.Lap(ft.Average(ft.Abs(ft.Gau1(ft.Lap(img)-img*ft.HEq(img))-img)/img)+img))', 'ft.Gau1(img)/img-img', 'ft.M05(ft.M05(img))', 'ft.GauDX(img*img+img-ft.LapG1(ft.Gau1(ft.GauDX(img))))', 'ft.GauDY(img+img)', 'ft.Average(img)', 'img+img/ft.GauDX(ft.LapG1(ft.GauDX(ft.Lap(img)))/ft.LapG2(img))', 'ft.Lap(ft.GauDY(img))', 'ft.LapG1(img)', 'ft.Sqr(ft.LapG1(ft.Gau2(img))+img)', 'ft.LapG2(img)-img+img', 'ft.Log(img+ft.Gau2(img))+ft.LapG2(img)', 'ft.Lap(ft.Lap(ft.Log(img*img)*img))', 'ft.LapG1(img)', 'ft.Median(img)', 'ft.Median(ft.Gau1(ft.Sqrt(ft.Gau2(img))))*ft.Abs(ft.LapG2(img))', 'ft.LapG2(ft.Abs(img)-img)', 'ft.Sqr(ft.Gau2(ft.Gau1(ft.LapG1(img*ft.Median(img)))-img))', 'ft.GauDY(img)-ft.M05(img*img)', 'img*ft.Gau1(img)/img+img', 'ft.Gau1(img/ft.Lap(img)+ft.Gau2(img))', 'ft.Lap(ft.Gau2(img*img))', 'ft.LapG1(img)', 'ft.LapG1(img)', 'ft.LapG1(ft.HEq(img))', 'ft.Lap(ft.LapG2(img))']
+
 import numpy as np
 from skimage import filters, exposure
-from scipy.ndimage import convolve, median_filter, gaussian_filter1d
+from cupyx.scipy.ndimage import convolve, median_filter, gaussian_filter1d
 
 class Filters:
     '''
