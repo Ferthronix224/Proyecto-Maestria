@@ -28,15 +28,15 @@ El proyecto está acelerado en **GPU mediante CuPy y cuCIM**, lo cual permite tr
 
 ## 📂 Estructura del Proyecto
 
-├── Filters.py # Filtros de imagen implementados con CuPy/cuCIM
-├── Fitness.py # Métrica de repetibilidad
-├── Genotype.py # Evolución Diferencial (mutación, cruce y selección)
-├── MP.py # Mapping Process (genotipo -> fenotipo)
-├── Process.py # Pipeline principal de evaluación
-├── Transformations.py # Transformaciones geométricas de interés
-├── main.py # Script principal de ejecución
-├── img/ # Carpeta de imágenes (originales y transformadas)
-└── README.md # Documentación del proyecto
+├── Filters.py # Filtros de imagen implementados con CuPy/cuCIM  
+├── Fitness.py # Métrica de repetibilidad  
+├── Genotype.py # Evolución Diferencial (mutación, cruce y selección)  
+├── MP.py # Mapping Process (genotipo -> fenotipo)  
+├── Process.py # Pipeline principal de evaluación  
+├── Transformations.py # Transformaciones geométricas de interés  
+├── main.py # Script principal de ejecución  
+├── img/ # Carpeta de imágenes (originales y transformadas)  
+└── README.md # Documentación del proyecto  
 
 
 ---
@@ -59,9 +59,9 @@ pip install cupy-cuda12x cucim-cu12 scikit-image numpy
 
 1. Prepara las imágenes en la carpeta img/:
 
- - img/originals/ → imágenes originales.
+    - img/originals/ → imágenes originales.
 
- - img/rotated/, img/translated/, img/scale/ → imágenes transformadas.
+    - img/rotated/, img/translated/, img/scale/ → imágenes transformadas.
 
 2. Corre el script principal:
 
