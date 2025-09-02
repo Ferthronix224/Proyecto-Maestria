@@ -1,4 +1,4 @@
-# Evolutionary Grammar for Interest Point Detectors (GPU Accelerated)
+# Diseño automático de detectores de puntos de interés mediante evolución gramatical
 
 Este proyecto implementa un **método de evolución gramatical** para diseñar detectores de puntos de interés en imágenes.  
 La idea principal es utilizar **gramáticas libres de contexto** para generar filtros de procesamiento de imágenes que se optimizan con **Evolución Diferencial (DE)**.  
