@@ -62,20 +62,20 @@ pip install cupy-cuda12x cucim-cu12 scikit-image numpy
     - img/originals/ → imágenes originales.
     - img/rotated/, img/translated/, img/scale/ → imágenes transformadas.
 
-2. Configurar los parámetros de la Evolución Gramatical
-├── UMBRAL: Umbral de similitud o repetibilidad usado como criterio de paro en la evaluación.
-├── POPULATION_SIZE: Tamaño de la población, es decir, el número de individuos que se evalúan en cada generación.
-├── GENOTYPE_LENGTH: Longitud del genotipo, la cantidad de genes que forman la cadena de cada individuo.
-├── LOW_LIM_GEN: Límite inferior de los valores posibles para los genes (lower limit).
-├── UP_LIM_GEN: Límite superior de los valores posibles para los genes (upper limit).
-├── F: Tasa de mutación diferencial. Controla la magnitud con la que se combinan soluciones (Xi + f(x2 - x3)).
-├── CROSSOVER_RATE: Probabilidad de cruce. Define la frecuencia con la que se mezclan genotipos entre individuos.
-├── GENERATIONS: Número máximo de generaciones que evoluciona la población.
-├── WR: Wrapping. Cantidad de veces que se recorre el genotipo completo para mapearlo a un fenotipo válido.
-├── LOW_LIM_IPN: Límite inferior del número de puntos de interés (Interest Points Number).
-├── UP_LIM_IPN: Límite superior del número de puntos de interés.
-├── TRANSFORMATION: Tipo de transformación aplicada a las imágenes (rotación, traslación o escalamiento).
-├── TRANSFORMATION_VALUE: Valor asociado a la transformación (grados para rotar, píxeles para trasladar o porcentaje para escalar).
+2. Configurar los parámetros de la Evolución Gramatical  
+├── UMBRAL: Umbral de similitud o repetibilidad usado como criterio de paro en la evaluación.  
+├── POPULATION_SIZE: Tamaño de la población, es decir, el número de individuos que se evalúan en cada generación.  
+├── GENOTYPE_LENGTH: Longitud del genotipo, la cantidad de genes que forman la cadena de cada individuo.  
+├── LOW_LIM_GEN: Límite inferior de los valores posibles para los genes (lower limit).  
+├── UP_LIM_GEN: Límite superior de los valores posibles para los genes (upper limit).  
+├── F: Tasa de mutación diferencial. Controla la magnitud con la que se combinan soluciones (Xi + f(x2 - x3)).  
+├── CROSSOVER_RATE: Probabilidad de cruce. Define la frecuencia con la que se mezclan genotipos entre individuos.  
+├── GENERATIONS: Número máximo de generaciones que evoluciona la población.  
+├── WR: Wrapping. Cantidad de veces que se recorre el genotipo completo para mapearlo a un fenotipo válido.  
+├── LOW_LIM_IPN: Límite inferior del número de puntos de interés (Interest Points Number).  
+├── UP_LIM_IPN: Límite superior del número de puntos de interés.  
+├── TRANSFORMATION: Tipo de transformación aplicada a las imágenes (rotación, traslación o escalamiento).  
+├── TRANSFORMATION_VALUE: Valor asociado a la transformación (grados para rotar, píxeles para trasladar o porcentaje para escalar).  
 
 3. Corre el script principal:
 
